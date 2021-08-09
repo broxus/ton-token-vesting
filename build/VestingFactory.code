@@ -1,0 +1,604 @@
+.macro constructor
+DROP
+GETGLOB 1
+ISNULL
+IFREF {
+	CALL $c4_to_c7_with_init_storage$
+}
+;; constructor protection
+GETGLOB 6
+THROWIF 51
+PUSHINT 1
+SETGLOB 6
+;; end constructor protection
+; Decode input parameters
+; Decode code
+;; decode TvmCell
+LDREF
+ENDS
+;; param: code
+; constructor VestingFactory
+ACCEPT
+; expValue
+; end expValue
+;; push identifier code
+DUP
+; colValue
+SETGLOB 11
+; end colValue
+; end constructor VestingFactory
+DROP
+CALLREF {
+	CALL $c7_to_c4$
+}
+TRUE
+SETGLOB 7
+
+.macro deployVesting
+DROP
+GETGLOB 1
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+LDU 32
+GETGLOB 4
+ROT
+SETINDEXQ 5
+SETGLOB 4
+; Decode input parameters
+; Decode tokenRoot
+LDMSGADDR
+; Decode beneficiary
+LDMSGADDRQ
+PUSHCONT {
+	;; load next cell
+	LDREF
+	ENDS
+	CTOS
+	LDMSGADDR
+}
+IFNOT
+; Decode startTime
+LDUQ 32
+PUSHCONT {
+	;; load next cell
+	LDREF
+	ENDS
+	CTOS
+	LDU 32
+}
+IFNOT
+; Decode duration
+LDUQ 32
+PUSHCONT {
+	;; load next cell
+	LDREF
+	ENDS
+	CTOS
+	LDU 32
+}
+IFNOT
+; Decode step
+LDUQ 32
+PUSHCONT {
+	;; load next cell
+	LDREF
+	ENDS
+	CTOS
+	LDU 32
+}
+IFNOT
+; Decode revocable
+LDIQ 1
+PUSHCONT {
+	;; load next cell
+	LDREF
+	ENDS
+	CTOS
+	LDI 1
+}
+IFNOT
+ENDS
+;; param: tokenRoot
+;; param: beneficiary
+;; param: startTime
+;; param: duration
+;; param: step
+;; param: revocable
+CALLREF {
+	CALL $deployVesting_internal_macro$
+}
+;; emitting 1 value(s)
+PUSH S1
+EQINT -1
+PUSHCONT {
+	PUSH S3
+	CTOS
+	LDU 2
+	LDMSGADDR
+	DROP
+	NIP
+	NEWC
+	STSLICECONST xc
+	STSLICE
+	PUSHINT 96
+	STZEROES
+	STSLICECONST 0
+	STSLICECONST 0
+	STSLICECONST xd3c4ddaa
+	PUSH S1
+	STSLICER
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+PUSHCONT {
+	GETGLOB 4
+	DUP
+	INDEX 3
+	PUSH S1
+	INDEX 2
+	GETGLOB 9
+	BLKSWAP 1, 3
+	INDEX 1
+	NEWC
+	PUSHINT 2
+	STZEROES
+	STI 1
+	PUSHINT 3
+	STZEROES
+	STSLICE
+	SWAP
+	STGRAMS
+	STDICT
+	PUSHINT 104
+	STZEROES
+	STSLICECONST 0
+	STSLICECONST 0
+	GETGLOB 4
+	INDEX 5
+	STUR 32
+	PUSH S1
+	STSLICER
+	ENDC
+	GETGLOB 4
+	INDEX 4
+	SENDRAWMSG
+}
+IFELSE
+DROP
+CALLREF {
+	CALL $c7_to_c4$
+}
+TRUE
+SETGLOB 7
+
+.globl	deployVesting_internal
+.type	deployVesting_internal, @function
+CALL $deployVesting_internal_macro$
+
+.macro deployVesting_internal_macro
+;; param: tokenRoot
+;; param: beneficiary
+;; param: startTime
+;; param: duration
+;; param: step
+;; param: revocable
+; function deployVesting
+;; get member value
+CALLREF {
+	CALL $message_balance_macro$
+}
+;; >=
+PUSHINT 2000000000
+;; +
+PUSHINT 500000000
+ADD
+UFITS 128
+GEQ
+THROWIFNOT 104
+;; get member value
+;; push identifier beneficiary
+PUSH S4
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+NEQINT 0
+THROWIFNOT 105
+;; push identifier step
+PUSH S1
+;; <=
+;; push identifier duration
+PUSH S3
+LEQ
+THROWIFNOT 106
+;; get member value
+;; push identifier tokenRoot
+PUSH S5
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+NEQINT 0
+THROWIFNOT 107
+;; push identifier duration
+PUSH S2
+GTINT 0
+THROWIFNOT 108
+;; push identifier startTime
+PUSH S3
+;; >
+;; push identifier now
+NOW
+GREATER
+THROWIFNOT 109
+;; get member balance
+GETPARAM 7
+INDEX 0
+;; -
+;; get member value
+CALLREF {
+	CALL $message_balance_macro$
+}
+SUB
+UFITS 128
+PUSHINT 2
+RAWRESERVE
+NEWDICT
+PUSHINT 0
+NEWC
+STU 256
+PUSHINT 0
+ROT
+PUSHINT 64
+DICTUSETB
+;; push identifier nonce
+GETGLOB 12
+NEWC
+STU 256
+PUSHINT 1
+ROT
+PUSHINT 64
+DICTUSETB
+;; get member sender
+GETGLOB 9
+PUSHINT 2
+ROT
+PUSHINT 64
+DICTUSET
+;; push identifier tokenRoot
+PUSH S6
+PUSHINT 3
+ROT
+PUSHINT 64
+DICTUSET
+;; push identifier beneficiary
+PUSH S5
+PUSHINT 4
+ROT
+PUSHINT 64
+DICTUSET
+;; push identifier startTime
+PUSH S4
+NEWC
+STU 32
+PUSHINT 5
+ROT
+PUSHINT 64
+DICTUSETB
+;; push identifier duration
+PUSH S3
+NEWC
+STU 32
+PUSHINT 6
+ROT
+PUSHINT 64
+DICTUSETB
+;; push identifier step
+PUSH S2
+NEWC
+STU 32
+PUSHINT 7
+ROT
+PUSHINT 64
+DICTUSETB
+;; push identifier revocable
+PUSH S1
+NEWC
+STI 1
+PUSHINT 8
+ROT
+PUSHINT 64
+DICTUSETB
+NEWC
+STDICT
+ENDC
+;; push identifier vestingCode
+GETGLOB 11
+NEWC
+STSLICECONST x2_
+STOPTREF
+STOPTREF
+STZERO
+ENDC
+;; decl: stateInit
+;; ++
+; expValue
+;; fetch nonce
+GETGLOB 12
+; end expValue
+INC
+; colValue
+SETGLOB 12
+; end colValue
+;; push identifier stateInit
+DUP
+DUP
+HASHCU
+NEWC
+STSLICECONST x801_
+STU 256
+ENDC
+CTOS
+PUSHINT 2000000000
+PUSH S1
+NEWC
+STSLICECONST x62_
+STSLICE
+SWAP
+STGRAMS
+PUSHINT 105
+STZEROES
+STSLICECONST xc_
+STSLICECONST 1
+PUSH S2
+STREFR
+STSLICECONST 0
+STSLICECONST x68b55f3f
+ENDC
+PUSHINT 1
+SENDRAWMSG
+NIP
+;; decl: vesting
+;; return
+GETGLOB 4
+PUSHINT 0
+SETINDEXQ 2
+PUSHINT 128
+SETINDEXQ 4
+SETGLOB 4
+;; push identifier vesting
+DUP
+BLKDROP2 2, 1
+; end function deployVesting
+BLKDROP2 6, 1
+
+.macro c7_to_c4
+GETGLOB 2
+NEWC
+STU 256
+GETGLOB 3
+STUR 64
+GETGLOB 6
+STUR 1
+GETGLOB 10
+GETGLOB 11
+GETGLOB 12
+REVERSE 4, 0
+STU 256
+STREF
+STU 256
+ENDC
+POP C4
+
+.macro c4_to_c7
+PUSHROOT
+CTOS        ; c4
+LDU 256      ; pubkey c4
+LDU 64      ; pubkey timestamp c4
+LDU 1       ; pubkey [timestamp] constructor_flag memory
+LDU 256
+LDREF
+PLDU 256
+SETGLOB 12
+SETGLOB 11
+SETGLOB 10
+TRUE
+SETGLOB 1   ; pubkey [timestamp] constructor_flag
+SETGLOB 6   ; pubkey [timestamp]
+SETGLOB 3   ; D
+SETGLOB 2
+
+.macro c4_to_c7_with_init_storage
+PUSHROOT
+CTOS        ; c4
+DUP        ; c4 c4
+SBITS      ; c4 bits
+GTINT 1    ; c4 bits>1
+PUSHCONT {
+	LDU 256      ; pubkey c4
+	LDU 64      ; pubkey timestamp c4
+	LDU 1       ; pubkey [timestamp] constructor_flag memory
+	LDU 256
+	LDREF
+	PLDU 256
+	SETGLOB 12
+	SETGLOB 11
+	SETGLOB 10
+	TRUE
+	SETGLOB 1   ; pubkey [timestamp] constructor_flag
+	SETGLOB 6   ; pubkey [timestamp]
+	SETGLOB 3   ; D
+	SETGLOB 2
+}
+PUSHCONT {
+	PLDDICT   ; D
+	; init _randomNonce
+	PUSHINT 1
+	PUSH S1
+	PUSHINT 64
+	DICTUGET
+	PUSHCONT {
+		PLDU 256
+	}
+	PUSHCONT {
+		PUSHINT 0
+	}
+	IFELSE
+	SETGLOB 10
+	; init vestingCode
+	NEWC
+	ENDC
+	SETGLOB 11
+	; init nonce
+	PUSHINT 0
+	SETGLOB 12
+	; set contract pubkey
+	PUSHINT 0
+	SWAP
+	PUSHINT 64
+	DICTUGET
+	THROWIFNOT 61
+	PLDU 256
+	SETGLOB 2
+	PUSHINT 0 ; timestamp
+	SETGLOB 3
+	PUSHINT 0 ; constructor_flag
+	SETGLOB 6
+	TRUE
+	SETGLOB 1
+	;; init state var: nonce
+	PUSHINT 0
+	SETGLOB 12
+}
+IFELSE
+
+.internal-alias :main_internal, 0
+.internal :main_internal
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Function: main_internal
+;; param: contract_balance
+;; param: msg_balance
+;; param: int_msg_info
+;; param: msg_body_slice
+PUSHINT 0  ; main_external trans id
+PUSH S2
+CTOS
+LDU 4       ; bounced tail
+LDMSGADDR   ; bounced src tail
+DROP
+SETGLOB 9
+MODPOW2 1
+; beg set default params for responsible func
+GETGLOB 4
+; bounce
+TRUE
+SETINDEXQ 1
+; tons
+PUSHINT 10000000
+SETINDEXQ 2
+; currency
+NULL
+SETINDEXQ 3
+; flag
+PUSHINT 0
+SETINDEXQ 4
+SETGLOB 4
+; end set default params for responsible func
+IFRET
+PUSH S1    ; body
+SEMPTY     ; isEmpty
+IFRET
+PUSH S1 ; body
+LDU 32  ; funcId body'
+PUSH S1 ; funcId body' funcId
+IFNOTRET
+SWAP
+CALLREF {
+	CALL $public_function_selector$
+}
+GETGLOB 7
+ISNULL
+THROWIF 60
+
+.internal-alias :main_external, -1
+.internal :main_external
+PUSHINT -1 ; main_external trans id
+PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+SETGLOB 9
+PUSH S1
+CALLREF {
+	CALL $c4_to_c7_with_init_storage$
+}
+LDU 1 ; haveSign msgSlice
+SWAP
+PUSHCONT {
+	PUSHINT 512
+	LDSLICEX ; signatureSlice msgSlice
+	DUP      ; signatureSlice msgSlice msgSlice
+	HASHSU   ; signatureSlice msgSlice hashMsgSlice
+	ROT
+	GETGLOB 2
+	CHKSIGNU      ; msgSlice isSigned
+	THROWIFNOT 40 ; msgSlice
+}
+IF
+LDU 64                         ; timestamp msgSlice
+SWAP                           ; msgSlice timestamp
+CALL $replay_protection_macro$ ; msgSlice
+LDU  32 ; funcId body
+SWAP    ; body funcId
+CALLREF {
+	CALL $public_function_selector$
+}
+GETGLOB 7
+ISNULL
+THROWIF 60
+
+.macro _randomNonce
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+;; emitting 1 value
+DUP
+EQINT -1
+PUSHCONT {
+	GETGLOB 10
+	NEWC
+	PUSHSLICE xc0000000000000000000000002_
+	STSLICER
+	STSLICECONST 0
+	STSLICECONST 0
+	STSLICECONST xbb53331f
+	PUSH S1
+	STUR 256
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+DROP
+TRUE
+SETGLOB 7
+
+.macro public_function_selector
+DUP
+PUSHINT 478865691
+EQUAL
+IFJMPREF {
+	CALL $constructor$
+}
+DUP
+PUSHINT 995308319
+EQUAL
+IFJMPREF {
+	CALL $_randomNonce$
+}
+DUP
+PUSHINT 1405410730
+EQUAL
+IFJMPREF {
+	CALL $deployVesting$
+}

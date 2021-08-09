@@ -1,0 +1,42 @@
+{
+	"ABI version": 2,
+	"header": ["time"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"code","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployVesting",
+			"inputs": [
+				{"name":"_answer_id","type":"uint32"},
+				{"name":"tokenRoot","type":"address"},
+				{"name":"beneficiary","type":"address"},
+				{"name":"startTime","type":"uint32"},
+				{"name":"duration","type":"uint32"},
+				{"name":"step","type":"uint32"},
+				{"name":"revocable","type":"bool"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "_randomNonce",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_randomNonce","type":"uint256"}
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"_randomNonce","type":"uint256"}
+	],
+	"events": [
+	]
+}

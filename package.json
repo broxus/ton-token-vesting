@@ -1,0 +1,20 @@
+{
+  "name": "token-vesting",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@broxus/contracts": "^1.0.2",
+    "bignumber.js": "^9.0.1",
+    "chai": "^4.3.4",
+    "locklift": "^1.4.4",
+    "mocha": "^9.0.3",
+    "mocha-logger": "^1.0.7",
+    "ton-eth-bridge-token-contracts": "git://github.com/broxus/ton-eth-bridge-token-contracts#74905260499d79cf7cb0d89a6eb572176fc1fcd5"
+  }
+}
