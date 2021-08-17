@@ -240,6 +240,11 @@ CALLREF {
 DUP
 GTINT 0
 THROWIFNOT 111
+; function _reserve
+PUSHINT 500000000
+PUSHINT 2
+RAWRESERVE
+; end function _reserve
 ;; if
 ;; push identifier amountToRelease
 DUP

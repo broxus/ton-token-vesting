@@ -15,7 +15,6 @@ import "../node_modules/@broxus/contracts/contracts/utils/RandomNonce.sol";
 
 
 contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, RandomNonce {
-
     enum Status {
         Initializing,
         WaitingForTokens,
@@ -74,6 +73,7 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
         require(_status() == Status.Active, Errors.VESTING_IS_NOT_ACTIVE);
         uint128 amountToRelease = _releasableAmount();
         require(amountToRelease > 0, Errors.RELEASE_AMOUNT_IS_ZERO);
+        _reserve();
 
         if (amountToRelease > balance) {
             amountToRelease = balance;
@@ -94,9 +94,8 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
         ITONTokenWallet(tokenWallet).balance{value: 0, flag: MsgFlag.ALL_NOT_RESERVED, callback: onGetBalanceRevoke}();
     }
 
-
     function releasableAmount() public view responsible returns (uint128) {
-        return _releasableAmount();
+        return {value: 0, bounce: false, flag: MsgFlag.REMAINING_GAS} _releasableAmount();
     }
 
     function getDetails() public view responsible returns (
@@ -113,12 +112,12 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
         uint128 balance_,
         Status status_
     ) {
-        return (owner, tokenRoot, beneficiary, startTime, duration, step,
-                lastWithdraw, revocable, revoked, initialBalance, balance, _status());
+        return {value: 0, bounce: false, flag: MsgFlag.REMAINING_GAS} (owner, tokenRoot, beneficiary, startTime,
+            duration, step, lastWithdraw, revocable, revoked, initialBalance, balance, _status());
     }
 
     function status() public view responsible returns(Status) {
-        return _status();
+        return {value: 0, bounce: false, flag: MsgFlag.REMAINING_GAS} _status();
     }
 
     function onGetBalanceRevoke(uint128 walletBalance) public view {
