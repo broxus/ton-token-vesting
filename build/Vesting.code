@@ -342,15 +342,8 @@ CALLREF {
 PUSHINT 1000000000
 GEQ
 THROWIFNOT 112
-;; push identifier now
-NOW
-;; <
-;; push identifier startTime
-GETGLOB 14
-LESS
 ;; push identifier revocable
 GETGLOB 17
-OR
 THROWIFNOT 113
 ; function _reserve
 PUSHINT 500000000
@@ -470,6 +463,14 @@ CALL $releasableAmount_internal_macro$
 .macro releasableAmount_internal_macro
 ; function releasableAmount
 ;; return
+GETGLOB 4
+PUSHINT 0
+SETINDEXQ 2
+FALSE
+SETINDEXQ 1
+PUSHINT 64
+SETINDEXQ 4
+SETGLOB 4
 CALLREF {
 	CALL $_releasableAmount_internal_macro$
 }
@@ -640,6 +641,14 @@ PUSHINT 0
 PUSHINT 0
 ; function getDetails
 ;; return
+GETGLOB 4
+PUSHINT 0
+SETINDEXQ 2
+FALSE
+SETINDEXQ 1
+PUSHINT 64
+SETINDEXQ 4
+SETGLOB 4
 ;; push identifier owner
 GETGLOB 11
 ;; push identifier tokenRoot
@@ -757,6 +766,14 @@ CALL $status_internal_macro$
 .macro status_internal_macro
 ; function status
 ;; return
+GETGLOB 4
+PUSHINT 0
+SETINDEXQ 2
+FALSE
+SETINDEXQ 1
+PUSHINT 64
+SETINDEXQ 4
+SETGLOB 4
 CALLREF {
 	CALL $_status_internal_macro$
 }
@@ -869,7 +886,7 @@ PUSHCONT {
 	LDU 256
 }
 IFNOT
-; Decode sender_address
+; Decode 
 LDMSGADDRQ
 PUSHCONT {
 	;; load next cell
@@ -917,7 +934,7 @@ ENDS
 ;; param: 
 ;; param: tokens_amount
 ;; param: 
-;; param: sender_address
+;; param: 
 ;; param: sender_wallet
 ;; param: original_gas_to
 ;; param: 
@@ -940,7 +957,7 @@ CALL $tokensReceivedCallback_internal_macro$
 ;; param: 
 ;; param: tokens_amount
 ;; param: 
-;; param: sender_address
+;; param: 
 ;; param: sender_wallet
 ;; param: original_gas_to
 ;; param: 
@@ -958,33 +975,22 @@ PUSHINT 2
 RAWRESERVE
 ; end function _reserve
 ;; if
-;; push identifier sender_address
-PUSH S4
-;; push identifier owner
-GETGLOB 11
+;; get member sender
+GETGLOB 9
+;; push identifier tokenWallet
+GETGLOB 19
 SDEQ
 ;; short-circuiting &&
 DUP
 PUSHCONT {
 	DROP
-	;; get member sender
-	GETGLOB 9
-	;; push identifier tokenWallet
-	GETGLOB 19
-	SDEQ
-	;; short-circuiting &&
-	DUP
-	PUSHCONT {
-		DROP
-		CALLREF {
-			CALL $_status_internal_macro$
-		}
-		;; ==
-		;; get member WaitingForTokens
-		PUSHINT 1
-		EQUAL
+	CALLREF {
+		CALL $_status_internal_macro$
 	}
-	IF
+	;; ==
+	;; get member WaitingForTokens
+	PUSHINT 1
+	EQUAL
 }
 IF
 PUSHCONT {

@@ -87,7 +87,7 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
 
     function revoke() public onlyOwner {
         require(msg.value >= Gas.REVOKE_MSG_VALUE, Errors.REVOKE_MSG_VALUE_TOO_LOW);
-        require(now < startTime || revocable, Errors.CANT_REVOKE);
+        require(revocable, Errors.CANT_REVOKE);
         _reserve();
 
         revoked = true;
@@ -131,7 +131,7 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
         address /*token_root*/,
         uint128 tokens_amount,
         uint256 /*sender_public_key*/,
-        address sender_address,
+        address /*sender_address*/,
         address sender_wallet,
         address original_gas_to,
         uint128 /*updated_balance*/,
@@ -140,7 +140,7 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
         require(msg.sender == token_wallet, Errors.WRONG_SENDER);
         _reserve();
 
-        if (sender_address == owner && msg.sender == tokenWallet && _status() == Status.WaitingForTokens) {
+        if (msg.sender == tokenWallet && _status() == Status.WaitingForTokens) {
             initialBalance = tokens_amount;
             balance = initialBalance;
             original_gas_to.transfer({value: 0, flag: MsgFlag.ALL_NOT_RESERVED});

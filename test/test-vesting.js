@@ -354,7 +354,7 @@ describe('Vesting', async function () {
         });
     });
 
-    describe('Test revoke before start', async function () {
+    describe.skip('Test revoke before start', async function () {
         let vesting;
         let depositAmount = new BigNumber(10).times(new BigNumber(10).pow(9));
         let params = {
