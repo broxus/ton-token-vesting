@@ -106,7 +106,7 @@ const deployVesting = async function ({startTime, duration, step, revocable}) {
                 duration: duration,
                 step: step,
                 revocable: revocable,
-                _answer_id: 240
+                answerId: 240
             }
         }
     )

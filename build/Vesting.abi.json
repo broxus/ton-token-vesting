@@ -1,5 +1,6 @@
 {
 	"ABI version": 2,
+	"version": "2.1",
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
@@ -26,7 +27,7 @@
 		{
 			"name": "releasableAmount",
 			"inputs": [
-				{"name":"_answer_id","type":"uint32"}
+				{"name":"answerId","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"value0","type":"uint128"}
@@ -35,7 +36,7 @@
 		{
 			"name": "getDetails",
 			"inputs": [
-				{"name":"_answer_id","type":"uint32"}
+				{"name":"answerId","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"owner_","type":"address"},
@@ -55,7 +56,7 @@
 		{
 			"name": "status",
 			"inputs": [
-				{"name":"_answer_id","type":"uint32"}
+				{"name":"answerId","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"value0","type":"uint8"}
@@ -211,5 +212,23 @@
 		{"key":8,"name":"revocable","type":"bool"}
 	],
 	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_randomNonce","type":"uint256"},
+		{"name":"owner","type":"address"},
+		{"name":"tokenRoot","type":"address"},
+		{"name":"beneficiary","type":"address"},
+		{"name":"startTime","type":"uint32"},
+		{"name":"duration","type":"uint32"},
+		{"name":"step","type":"uint32"},
+		{"name":"revocable","type":"bool"},
+		{"name":"revoked","type":"bool"},
+		{"name":"tokenWallet","type":"address"},
+		{"name":"lastWithdraw","type":"uint32"},
+		{"name":"initialBalance","type":"uint128"},
+		{"name":"balance","type":"uint128"}
 	]
 }

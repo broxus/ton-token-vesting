@@ -1,23 +1,19 @@
+.version sol 0.49.0
+
 .macro constructor
 DROP
-GETGLOB 1
+GETGLOB 2
 ISNULL
 IFREF {
 	CALL $c4_to_c7_with_init_storage$
 }
-;; constructor protection
 GETGLOB 6
 THROWIF 51
-PUSHINT 1
-SETGLOB 6
-;; end constructor protection
-; Decode input parameters
 ENDS
-; constructor Vesting
-;; if
+.loc ../contracts/Vesting.sol, 54
 GETGLOB 2
-NEQINT 0
 PUSHCONT {
+	.loc ../contracts/Vesting.sol, 55
 	GETGLOB 5
 	DUP
 	ISNULL
@@ -26,159 +22,133 @@ PUSHCONT {
 		PUSHINT 0
 	}
 	IF
-	;; ==
 	GETGLOB 2
 	EQUAL
 	THROWIFNOT 103
-	;; get member balance
+	.loc ../contracts/Vesting.sol, 56
 	GETPARAM 7
 	INDEX 0
-	;; >=
 	PUSHINT 2000000000
 	GEQ
 	THROWIFNOT 104
+	.loc ../contracts/Vesting.sol, 57
 	ACCEPT
+	.loc ../contracts/Vesting.sol, 0
 }
 PUSHCONT {
-	;; get member value
-	CALLREF {
-		CALL $message_balance_macro$
-	}
-	;; >=
+	.loc ../contracts/Vesting.sol, 59
+	DEPTH
+	ADDCONST -2
+	PICK
 	PUSHINT 2000000000
 	GEQ
 	THROWIFNOT 104
+	.loc ../contracts/Vesting.sol, 0
 }
 IFELSE
-;; end if
-;; get member value
-;; push identifier beneficiary
+.loc ../contracts/Vesting.sol, 62
 GETGLOB 13
 PARSEMSGADDR
 INDEX 3
 PLDU 256
-NEQINT 0
 THROWIFNOT 105
-;; push identifier step
+.loc ../contracts/Vesting.sol, 63
 GETGLOB 16
-;; <=
-;; push identifier duration
 GETGLOB 15
 LEQ
 THROWIFNOT 106
-;; get member value
-;; push identifier tokenRoot
+.loc ../contracts/Vesting.sol, 64
 GETGLOB 12
 PARSEMSGADDR
 INDEX 3
 PLDU 256
-NEQINT 0
 THROWIFNOT 107
-;; push identifier duration
+.loc ../contracts/Vesting.sol, 65
 GETGLOB 15
 GTINT 0
 THROWIFNOT 108
-;; push identifier startTime
+.loc ../contracts/Vesting.sol, 66
 GETGLOB 14
-;; >
-;; push identifier now
 NOW
 GREATER
 THROWIFNOT 109
-; expValue
-; end expValue
-;; push identifier startTime
+.loc ../contracts/Vesting.sol, 67
 GETGLOB 14
-; colValue
 SETGLOB 20
-; end colValue
-; function _deployWallets
-;; Remote call IRootTokenContract.deployEmptyWallet
-;; push identifier tokenRoot
-GETGLOB 12
-NEWC
-STSLICECONST x62_
-STSLICE
-PUSHSLICE x41dcd6500000000000000000000000000004_
-STSLICER
-STSLICECONST 0
-STSLICECONST 1
-NEWC
-STSLICECONST x542b1672
-;; deploy_grams
-PUSHINT 300000000
-STUR 128
-;; wallet_public_key
-PUSHINT 0
-STUR 256
-;; owner_address
+.loc ../contracts/Vesting.sol, 217
+GETGLOB 11
 MYADDR
-STSLICER
-;; gas_back_address
-;; push identifier owner
-GETGLOB 11
-STSLICER
-STBREFR
-ENDC
-PUSHINT 1
-SENDRAWMSG
-;; Remote call IRootTokenContract.deployEmptyWallet
-;; push identifier tokenRoot
+PUSHINT 0
+PUSHINT 300000000
 GETGLOB 12
 NEWC
 STSLICECONST x62_
 STSLICE
-PUSHSLICE x41dcd6500000000000000000000000000004_
+PUSHSLICE x41dcd6500000000000000000000000000003_
 STSLICER
-STSLICECONST 0
-STSLICECONST 1
+ROLLREV 4
 NEWC
 STSLICECONST x542b1672
-;; deploy_grams
-PUSHINT 300000000
-STUR 128
-;; wallet_public_key
-PUSHINT 0
-STUR 256
-;; owner_address
-;; push identifier beneficiary
-GETGLOB 13
-STSLICER
-;; gas_back_address
-;; push identifier owner
-GETGLOB 11
-STSLICER
+STU 128
+STU 256
+STSLICE
+SWAP
+NEWC
+STSLICE
+STBREFR
 STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-;; Remote call IRootTokenContract.sendExpectedWalletAddress
-;; push identifier tokenRoot
+.loc ../contracts/Vesting.sol, 227
+GETGLOB 11
+GETGLOB 13
+PUSHINT 0
+PUSHINT 300000000
 GETGLOB 12
 NEWC
 STSLICECONST x62_
 STSLICE
-PUSHSLICE x405f5e100000000000000000000000000004_
+PUSHSLICE x41dcd6500000000000000000000000000003_
 STSLICER
-STSLICECONST 0
-STSLICECONST 1
+ROLLREV 4
+NEWC
+STSLICECONST x542b1672
+STU 128
+STU 256
+STSLICE
+SWAP
+NEWC
+STSLICE
+STBREFR
+STBREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc ../contracts/Vesting.sol, 237
+MYADDR
+MYADDR
+PUSHINT 0
+GETGLOB 12
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHSLICE x405f5e100000000000000000000000000003_
+STSLICER
+ROLLREV 3
 NEWC
 STSLICECONST x55b3a9fb
-;; wallet_public_key_
-PUSHINT 0
-STUR 256
-;; owner_address_
-MYADDR
-STSLICER
-;; to
-MYADDR
-STSLICER
+STU 256
+STSLICE
+SWAP
+NEWC
+STSLICE
+STBREFR
 STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-; end function _deployWallets
-; end constructor Vesting
+.loc ../contracts/Vesting.sol, 0
 CALLREF {
 	CALL $c7_to_c4$
 }
@@ -187,13 +157,16 @@ SETGLOB 7
 
 .macro release
 DROP
-GETGLOB 1
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
 ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-; Decode input parameters
+.loc ../contracts/Vesting.sol, 71
 ENDS
+.loc ../contracts/Vesting.sol, 0
 CALLREF {
 	CALL $release_internal_macro$
 }
@@ -208,110 +181,83 @@ SETGLOB 7
 CALL $release_internal_macro$
 
 .macro release_internal_macro
-; modifier onlyBeneficiary
-;; get member sender
+.loc ../contracts/Vesting.sol, 44
 GETGLOB 9
-;; push identifier beneficiary
 GETGLOB 13
 SDEQ
 THROWIFNOT 102
-; function release
-;; get member value
-CALLREF {
-	CALL $message_balance_macro$
-}
-;; >=
+.loc ../contracts/Vesting.sol, 72
+DEPTH
+ADDCONST -2
+PICK
 PUSHINT 1000000000
 GEQ
 THROWIFNOT 117
+.loc ../contracts/Vesting.sol, 73
 CALLREF {
 	CALL $_status_internal_macro$
 }
-;; ==
-;; get member Active
-PUSHINT 3
-EQUAL
+EQINT 3
 THROWIFNOT 110
+.loc ../contracts/Vesting.sol, 74
 CALLREF {
 	CALL $_releasableAmount_internal_macro$
 }
-;; decl: amountToRelease
-;; push identifier amountToRelease
+.loc ../contracts/Vesting.sol, 75
 DUP
 GTINT 0
 THROWIFNOT 111
-; function _reserve
+.loc ../contracts/Vesting.sol, 249
 PUSHINT 500000000
 PUSHINT 2
 RAWRESERVE
-; end function _reserve
-;; if
-;; push identifier amountToRelease
+.loc ../contracts/Vesting.sol, 78
 DUP
-;; >
-;; push identifier balance
 GETGLOB 22
 GREATER
 PUSHCONT {
-	; expValue
-	; end expValue
-	;; push identifier balance
+	.loc ../contracts/Vesting.sol, 79
+	DROP
 	GETGLOB 22
-	; colValue
-	NIP
-	; end colValue
-	; expValue
-	; end expValue
+	.loc ../contracts/Vesting.sol, 80
 	PUSHINT 0
-	; colValue
 	SETGLOB 22
-	; end colValue
+	.loc ../contracts/Vesting.sol, 0
 }
 PUSHCONT {
-	;; push identifier amountToRelease
-	DUP
-	; expValue
-	;; fetch balance
+	.loc ../contracts/Vesting.sol, 82
 	GETGLOB 22
-	; end expValue
-	SWAP
+	OVER
 	SUB
 	UFITS 128
-	; colValue
 	SETGLOB 22
-	; end colValue
+	.loc ../contracts/Vesting.sol, 0
 }
 IFELSE
-;; end if
-; expValue
-; end expValue
-;; push identifier now
+.loc ../contracts/Vesting.sol, 84
 NOW
-; colValue
 SETGLOB 20
-; end colValue
-;; push identifier beneficiary
+.loc ../contracts/Vesting.sol, 85
 GETGLOB 13
-;; push identifier amountToRelease
-PUSH S1
-;; push identifier beneficiary
+SWAP
 GETGLOB 13
 CALLREF {
 	CALL $sendTokens_internal_macro$
 }
-DROP
-; end function release
-; end modifier onlyBeneficiary
+.loc ../contracts/Vesting.sol, 0
 
 .macro revoke
 DROP
-GETGLOB 1
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
 ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-; Decode input parameters
+.loc ../contracts/Vesting.sol, 88
 ENDS
+.loc ../contracts/Vesting.sol, 0
 CALLREF {
 	CALL $revoke_internal_macro$
 }
@@ -326,74 +272,61 @@ SETGLOB 7
 CALL $revoke_internal_macro$
 
 .macro revoke_internal_macro
-; modifier onlyOwner
-;; get member sender
+.loc ../contracts/Vesting.sol, 49
 GETGLOB 9
-;; push identifier owner
 GETGLOB 11
 SDEQ
 THROWIFNOT 101
-; function revoke
-;; get member value
-CALLREF {
-	CALL $message_balance_macro$
-}
-;; >=
+.loc ../contracts/Vesting.sol, 89
+DEPTH
+ADDCONST -2
+PICK
 PUSHINT 1000000000
 GEQ
 THROWIFNOT 112
-;; push identifier revocable
+.loc ../contracts/Vesting.sol, 90
 GETGLOB 17
 THROWIFNOT 113
-; function _reserve
+.loc ../contracts/Vesting.sol, 249
 PUSHINT 500000000
 PUSHINT 2
 RAWRESERVE
-; end function _reserve
-; expValue
-; end expValue
+.loc ../contracts/Vesting.sol, 93
 TRUE
-; colValue
 SETGLOB 18
-; end colValue
-;; Remote call ITONTokenWallet.balance
-;; push identifier tokenWallet
+.loc ../contracts/Vesting.sol, 94
 GETGLOB 19
 NEWC
 STSLICECONST x62_
 STSLICE
-PUSHINT 109
-STZEROES
-STSLICECONST 0
-STSLICECONST 0
-STSLICECONST x4969587f
-STSLICECONST x0c4c070b
+PUSHSLICE x000000000000000000000000000092d2b0fe18980e17_
+STSLICER
 ENDC
 PUSHINT 128
 SENDRAWMSG
-; end function revoke
-; end modifier onlyOwner
+.loc ../contracts/Vesting.sol, 0
 
 .macro releasableAmount
 DROP
-GETGLOB 1
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
 ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
+.loc ../contracts/Vesting.sol, 97
 LDU 32
 GETGLOB 4
 ROT
 SETINDEXQ 5
 SETGLOB 4
-; Decode input parameters
 ENDS
+.loc ../contracts/Vesting.sol, 0
 CALLREF {
 	CALL $releasableAmount_internal_macro$
 }
-;; emitting 1 value(s)
-PUSH S1
-EQINT -1
+OVER
 PUSHCONT {
 	PUSH S3
 	CTOS
@@ -404,13 +337,9 @@ PUSHCONT {
 	NEWC
 	STSLICECONST xc
 	STSLICE
-	PUSHINT 96
-	STZEROES
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xe8fbc986
-	PUSH S1
-	STUR 128
+	PUSHSLICE x0000000000000000000000003a3ef261a_
+	STSLICER
+	STU 128
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
@@ -419,10 +348,10 @@ PUSHCONT {
 	GETGLOB 4
 	DUP
 	INDEX 3
-	PUSH S1
+	OVER
 	INDEX 2
 	GETGLOB 9
-	BLKSWAP 1, 3
+	ROLL 3
 	INDEX 1
 	NEWC
 	PUSHINT 2
@@ -434,22 +363,18 @@ PUSHCONT {
 	SWAP
 	STGRAMS
 	STDICT
-	PUSHINT 104
+	PUSHINT 106
 	STZEROES
-	STSLICECONST 0
-	STSLICECONST 0
 	GETGLOB 4
 	INDEX 5
 	STUR 32
-	PUSH S1
-	STUR 128
+	STU 128
 	ENDC
 	GETGLOB 4
 	INDEX 4
 	SENDRAWMSG
 }
 IFELSE
-DROP
 IFREF {
 	CALL $c7_to_c4$
 }
@@ -461,8 +386,7 @@ SETGLOB 7
 CALL $releasableAmount_internal_macro$
 
 .macro releasableAmount_internal_macro
-; function releasableAmount
-;; return
+.loc ../contracts/Vesting.sol, 98
 GETGLOB 4
 PUSHINT 0
 SETINDEXQ 2
@@ -474,28 +398,29 @@ SETGLOB 4
 CALLREF {
 	CALL $_releasableAmount_internal_macro$
 }
-; end function releasableAmount
+.loc ../contracts/Vesting.sol, 0
 
 .macro getDetails
 DROP
-GETGLOB 1
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
 ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
+.loc ../contracts/Vesting.sol, 101
 LDU 32
 GETGLOB 4
 ROT
 SETINDEXQ 5
 SETGLOB 4
-; Decode input parameters
 ENDS
+.loc ../contracts/Vesting.sol, 0
 CALLREF {
 	CALL $getDetails_internal_macro$
 }
-;; emitting 12 value(s)
 PUSH S12
-EQINT -1
 PUSHCONT {
 	PUSH S14
 	CTOS
@@ -506,37 +431,28 @@ PUSHCONT {
 	NEWC
 	STSLICECONST xc
 	STSLICE
-	PUSHINT 96
-	STZEROES
-	STSLICECONST 0
-	STSLICECONST 1
+	PUSHINT 1
+	STUR 98
+	REVERSE 13, 0
 	NEWC
 	STSLICECONST xd7af6096
-	PUSH S13
-	STSLICER
-	PUSH S12
-	STSLICER
-	PUSH S11
-	STSLICER
-	PUSH S10
-	STUR 32
-	PUSH S9
-	STUR 32
+	STSLICE
+	ROLLREV 11
 	NEWC
-	PUSH S9
-	STUR 32
-	PUSH S8
-	STUR 32
-	PUSH S7
-	STIR 1
-	PUSH S6
-	STIR 1
-	PUSH S5
-	STUR 128
-	PUSH S4
-	STUR 128
-	PUSH S3
-	STUR 8
+	STSLICE
+	ROLLREV 10
+	NEWC
+	STSLICE
+	STU 32
+	STU 32
+	STU 32
+	STU 32
+	STI 1
+	STI 1
+	STU 128
+	STU 128
+	STU 8
+	STBREFR
 	STBREFR
 	STBREFR
 	ENDC
@@ -547,10 +463,10 @@ PUSHCONT {
 	GETGLOB 4
 	DUP
 	INDEX 3
-	PUSH S1
+	OVER
 	INDEX 2
 	GETGLOB 9
-	BLKSWAP 1, 3
+	ROLL 3
 	INDEX 1
 	NEWC
 	PUSHINT 2
@@ -562,39 +478,30 @@ PUSHCONT {
 	SWAP
 	STGRAMS
 	STDICT
-	PUSHINT 104
-	STZEROES
-	STSLICECONST 0
-	STSLICECONST 1
+	PUSHINT 1
+	STUR 106
+	REVERSE 13, 0
 	NEWC
 	GETGLOB 4
 	INDEX 5
 	STUR 32
-	PUSH S13
-	STSLICER
-	PUSH S12
-	STSLICER
-	PUSH S11
-	STSLICER
-	PUSH S10
-	STUR 32
-	PUSH S9
-	STUR 32
+	STSLICE
+	ROLLREV 11
 	NEWC
-	PUSH S9
-	STUR 32
-	PUSH S8
-	STUR 32
-	PUSH S7
-	STIR 1
-	PUSH S6
-	STIR 1
-	PUSH S5
-	STUR 128
-	PUSH S4
-	STUR 128
-	PUSH S3
-	STUR 8
+	STSLICE
+	ROLLREV 10
+	NEWC
+	STSLICE
+	STU 32
+	STU 32
+	STU 32
+	STU 32
+	STI 1
+	STI 1
+	STU 128
+	STU 128
+	STU 8
+	STBREFR
 	STBREFR
 	STBREFR
 	ENDC
@@ -603,7 +510,6 @@ PUSHCONT {
 	SENDRAWMSG
 }
 IFELSE
-BLKDROP 12
 IFREF {
 	CALL $c7_to_c4$
 }
@@ -615,32 +521,7 @@ SETGLOB 7
 CALL $getDetails_internal_macro$
 
 .macro getDetails_internal_macro
-;; ret param: owner_
-PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
-;; ret param: tokenRoot_
-PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
-;; ret param: beneficiary_
-PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
-;; ret param: startTime_
-PUSHINT 0
-;; ret param: duration_
-PUSHINT 0
-;; ret param: step_
-PUSHINT 0
-;; ret param: lastWithdraw_
-PUSHINT 0
-;; ret param: revocable_
-PUSHINT 0
-;; ret param: revoked_
-PUSHINT 0
-;; ret param: initialBalance_
-PUSHINT 0
-;; ret param: balance_
-PUSHINT 0
-;; ret param: status_
-PUSHINT 0
-; function getDetails
-;; return
+.loc ../contracts/Vesting.sol, 115
 GETGLOB 4
 PUSHINT 0
 SETINDEXQ 2
@@ -649,54 +530,43 @@ SETINDEXQ 1
 PUSHINT 64
 SETINDEXQ 4
 SETGLOB 4
-;; push identifier owner
 GETGLOB 11
-;; push identifier tokenRoot
 GETGLOB 12
-;; push identifier beneficiary
 GETGLOB 13
-;; push identifier startTime
 GETGLOB 14
-;; push identifier duration
 GETGLOB 15
-;; push identifier step
 GETGLOB 16
-;; push identifier lastWithdraw
 GETGLOB 20
-;; push identifier revocable
 GETGLOB 17
-;; push identifier revoked
 GETGLOB 18
-;; push identifier initialBalance
 GETGLOB 21
-;; push identifier balance
 GETGLOB 22
 CALLREF {
 	CALL $_status_internal_macro$
 }
-BLKDROP2 12, 12
-; end function getDetails
+.loc ../contracts/Vesting.sol, 0
 
 .macro status
 DROP
-GETGLOB 1
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
 ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
+.loc ../contracts/Vesting.sol, 119
 LDU 32
 GETGLOB 4
 ROT
 SETINDEXQ 5
 SETGLOB 4
-; Decode input parameters
 ENDS
+.loc ../contracts/Vesting.sol, 0
 CALLREF {
 	CALL $status_internal_macro$
 }
-;; emitting 1 value(s)
-PUSH S1
-EQINT -1
+OVER
 PUSHCONT {
 	PUSH S3
 	CTOS
@@ -707,13 +577,9 @@ PUSHCONT {
 	NEWC
 	STSLICECONST xc
 	STSLICE
-	PUSHINT 96
-	STZEROES
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xe750af70
-	PUSH S1
-	STUR 8
+	PUSHSLICE x00000000000000000000000039d42bdc2_
+	STSLICER
+	STU 8
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
@@ -722,10 +588,10 @@ PUSHCONT {
 	GETGLOB 4
 	DUP
 	INDEX 3
-	PUSH S1
+	OVER
 	INDEX 2
 	GETGLOB 9
-	BLKSWAP 1, 3
+	ROLL 3
 	INDEX 1
 	NEWC
 	PUSHINT 2
@@ -737,22 +603,18 @@ PUSHCONT {
 	SWAP
 	STGRAMS
 	STDICT
-	PUSHINT 104
+	PUSHINT 106
 	STZEROES
-	STSLICECONST 0
-	STSLICECONST 0
 	GETGLOB 4
 	INDEX 5
 	STUR 32
-	PUSH S1
-	STUR 8
+	STU 8
 	ENDC
 	GETGLOB 4
 	INDEX 4
 	SENDRAWMSG
 }
 IFELSE
-DROP
 IFREF {
 	CALL $c7_to_c4$
 }
@@ -764,8 +626,7 @@ SETGLOB 7
 CALL $status_internal_macro$
 
 .macro status_internal_macro
-; function status
-;; return
+.loc ../contracts/Vesting.sol, 120
 GETGLOB 4
 PUSHINT 0
 SETINDEXQ 2
@@ -777,20 +638,20 @@ SETGLOB 4
 CALLREF {
 	CALL $_status_internal_macro$
 }
-; end function status
+.loc ../contracts/Vesting.sol, 0
 
 .macro onGetBalanceRevoke
 DROP
-GETGLOB 1
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
 ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-; Decode input parameters
-; Decode walletBalance
+.loc ../contracts/Vesting.sol, 123
 LDUQ 128
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
@@ -798,7 +659,7 @@ PUSHCONT {
 }
 IFNOT
 ENDS
-;; param: walletBalance
+.loc ../contracts/Vesting.sol, 0
 CALLREF {
 	CALL $onGetBalanceRevoke_internal_macro$
 }
@@ -813,132 +674,101 @@ SETGLOB 7
 CALL $onGetBalanceRevoke_internal_macro$
 
 .macro onGetBalanceRevoke_internal_macro
-;; param: walletBalance
-; function onGetBalanceRevoke
-;; get member sender
+.loc ../contracts/Vesting.sol, 124
 GETGLOB 9
-;; push identifier tokenWallet
 GETGLOB 19
 SDEQ
 THROWIFNOT 114
-; function _reserve
+.loc ../contracts/Vesting.sol, 249
 PUSHINT 500000000
 PUSHINT 2
 RAWRESERVE
-; end function _reserve
-;; push identifier owner
+.loc ../contracts/Vesting.sol, 126
 GETGLOB 11
-;; push identifier walletBalance
-PUSH S1
-;; push identifier owner
+SWAP
 GETGLOB 11
 CALLREF {
 	CALL $sendTokens_internal_macro$
 }
-; end function onGetBalanceRevoke
-DROP
+.loc ../contracts/Vesting.sol, 0
 
 .macro tokensReceivedCallback
 DROP
-GETGLOB 1
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
 ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-; Decode input parameters
-; Decode token_wallet
+.loc ../contracts/Vesting.sol, 129
 LDMSGADDRQ
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
 	LDMSGADDR
 }
 IFNOT
-; Decode 
 LDMSGADDRQ
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
 	LDMSGADDR
 }
 IFNOT
-; Decode tokens_amount
 LDUQ 128
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
 	LDU 128
 }
 IFNOT
-; Decode 
 LDUQ 256
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
 	LDU 256
 }
 IFNOT
-; Decode 
 LDMSGADDRQ
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
 	LDMSGADDR
 }
 IFNOT
-; Decode sender_wallet
 LDMSGADDRQ
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
 	LDMSGADDR
 }
 IFNOT
-; Decode original_gas_to
 LDMSGADDRQ
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
 	LDMSGADDR
 }
 IFNOT
-; Decode 
 LDUQ 128
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
 	LDU 128
 }
 IFNOT
-; Decode 
-;; decode TvmCell
 LDREF
 ENDS
-;; param: token_wallet
-;; param: 
-;; param: tokens_amount
-;; param: 
-;; param: 
-;; param: sender_wallet
-;; param: original_gas_to
-;; param: 
-;; param: 
+.loc ../contracts/Vesting.sol, 0
 CALLREF {
 	CALL $tokensReceivedCallback_internal_macro$
 }
@@ -953,156 +783,111 @@ SETGLOB 7
 CALL $tokensReceivedCallback_internal_macro$
 
 .macro tokensReceivedCallback_internal_macro
-;; param: token_wallet
-;; param: 
-;; param: tokens_amount
-;; param: 
-;; param: 
-;; param: sender_wallet
-;; param: original_gas_to
-;; param: 
-;; param: 
-; function tokensReceivedCallback
-;; get member sender
+.loc ../contracts/Vesting.sol, 140
 GETGLOB 9
-;; push identifier token_wallet
-PUSH S9
+ROLL 9
 SDEQ
 THROWIFNOT 115
-; function _reserve
+.loc ../contracts/Vesting.sol, 249
 PUSHINT 500000000
 PUSHINT 2
 RAWRESERVE
-; end function _reserve
-;; if
-;; get member sender
+.loc ../contracts/Vesting.sol, 143
 GETGLOB 9
-;; push identifier tokenWallet
 GETGLOB 19
 SDEQ
-;; short-circuiting &&
 DUP
 PUSHCONT {
 	DROP
 	CALLREF {
 		CALL $_status_internal_macro$
 	}
-	;; ==
-	;; get member WaitingForTokens
-	PUSHINT 1
-	EQUAL
+	EQINT 1
 }
 IF
 PUSHCONT {
-	; expValue
-	; end expValue
-	;; push identifier tokens_amount
-	PUSH S6
-	; colValue
+	.loc ../contracts/Vesting.sol, 144
+	PUSH2 S6, S6
 	SETGLOB 21
-	; end colValue
-	; expValue
-	; end expValue
-	;; push identifier initialBalance
-	GETGLOB 21
-	; colValue
+	.loc ../contracts/Vesting.sol, 145
 	SETGLOB 22
-	; end colValue
-	;; transfer()
-	;; push identifier original_gas_to
+	.loc ../contracts/Vesting.sol, 146
 	PUSH S2
 	NEWC
 	STSLICECONST x62_
 	STSLICE
-	PUSHINT 109
+	PUSHINT 111
 	STZEROES
-	STSLICECONST 0
-	STSLICECONST 0
 	ENDC
 	PUSHINT 128
 	SENDRAWMSG
+	.loc ../contracts/Vesting.sol, 0
 }
 PUSHCONT {
-	NEWC
-	ENDC
-	;; decl: empty
-	;; Remote call ITONTokenWallet.transfer
-	;; get member sender
+	.loc ../contracts/Vesting.sol, 148
+	PUSHREF {
+	}
+	.loc ../contracts/Vesting.sol, 149
+	FALSE
+	PUSH S4
+	PUSHINT 0
+	PUSH2 S10, S7
 	GETGLOB 9
 	NEWC
 	STSLICECONST x62_
 	STSLICE
-	PUSHINT 109
-	STZEROES
-	STSLICECONST 0
-	STSLICECONST 1
+	PUSHINT 1
+	STUR 111
+	ROLLREV 6
 	NEWC
 	STSLICECONST x4bf160e2
-	;; to
-	;; push identifier sender_wallet
-	PUSH S6
-	STSLICER
-	;; tokens
-	;; push identifier tokens_amount
-	PUSH S9
-	STUR 128
-	;; grams
-	PUSHINT 0
-	STUR 128
-	;; send_gas_to
-	;; push identifier original_gas_to
-	PUSH S5
-	STSLICER
-	;; notify_receiver
-	FALSE
-	STIR 1
-	;; payload
-	;; push identifier empty
-	PUSH S2
-	STREFR
+	STSLICE
+	STU 128
+	STU 128
+	ROLLREV 3
+	NEWC
+	STSLICE
+	STI 1
+	STREF
+	STBREFR
 	STBREFR
 	ENDC
 	PUSHINT 128
 	SENDRAWMSG
-	DROP
+	.loc ../contracts/Vesting.sol, 0
 }
 IFELSE
-;; end if
-; end function tokensReceivedCallback
-BLKDROP 9
+.loc ../contracts/Vesting.sol, 0
+BLKDROP 8
 
 .macro expectedWalletAddressCallback
 DROP
-GETGLOB 1
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
 ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-; Decode input parameters
-; Decode wallet
+.loc ../contracts/Vesting.sol, 160
 LDMSGADDRQ
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
 	LDMSGADDR
 }
 IFNOT
-; Decode 
 LDUQ 256
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
 	LDU 256
 }
 IFNOT
-; Decode owner_address
 LDMSGADDRQ
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
@@ -1110,9 +895,7 @@ PUSHCONT {
 }
 IFNOT
 ENDS
-;; param: wallet
-;; param: 
-;; param: owner_address
+.loc ../contracts/Vesting.sol, 0
 CALLREF {
 	CALL $expectedWalletAddressCallback_internal_macro$
 }
@@ -1127,418 +910,323 @@ SETGLOB 7
 CALL $expectedWalletAddressCallback_internal_macro$
 
 .macro expectedWalletAddressCallback_internal_macro
-;; param: wallet
-;; param: 
-;; param: owner_address
-; function expectedWalletAddressCallback
-;; get member sender
+.loc ../contracts/Vesting.sol, 165
 GETGLOB 9
-;; push identifier tokenRoot
 GETGLOB 12
 SDEQ
 THROWIFNOT 116
-;; push identifier owner_address
-DUP
+.loc ../contracts/Vesting.sol, 166
 MYADDR
 SDEQ
 THROWIFNOT 114
-; function _reserve
+.loc ../contracts/Vesting.sol, 249
 PUSHINT 500000000
 PUSHINT 2
 RAWRESERVE
-; end function _reserve
-; expValue
-; end expValue
-;; push identifier wallet
-PUSH S2
-; colValue
+.loc ../contracts/Vesting.sol, 168
+OVER
 SETGLOB 19
-; end colValue
-;; Remote call ITONTokenWallet.setReceiveCallback
-;; push identifier wallet
-PUSH S2
+.loc ../contracts/Vesting.sol, 169
+FALSE
+MYADDR
+ROLL 3
 NEWC
 STSLICECONST x62_
 STSLICE
-PUSHINT 109
-STZEROES
-STSLICECONST 0
-STSLICECONST 0
+PUSHINT 1
+STUR 111
+ROTREV
+NEWC
 STSLICECONST x71eee875
-;; receive_callback
-MYADDR
-STSLICER
-;; allow_non_notifiable
-FALSE
-STIR 1
+STSLICE
+STI 1
+STBREFR
 ENDC
 PUSHINT 128
 SENDRAWMSG
-; end function expectedWalletAddressCallback
-BLKDROP 3
+.loc ../contracts/Vesting.sol, 0
+DROP
 
 .globl	_status_internal
 .type	_status_internal, @function
 CALL $_status_internal_macro$
 
 .macro _status_internal_macro
-;; ret param: retParam@0
+.loc ../contracts/Vesting.sol, 172
 PUSHINT 0
-; function _status
 PUSHCONT {
-	;; if
-	;; get member value
-	;; push identifier tokenWallet
+	.loc ../contracts/Vesting.sol, 173
 	GETGLOB 19
 	PARSEMSGADDR
 	INDEX 3
 	PLDU 256
 	PUSHCONT {
-		;; return
-		;; get member Initializing
+		.loc ../contracts/Vesting.sol, 174
+		DROP
 		PUSHINT 0
-		NIP
-		RET
+		.loc ../contracts/Vesting.sol, 0
 	}
 	IFNOTJMP
-	;; end if
-	;; if
-	;; push identifier initialBalance
+	.loc ../contracts/Vesting.sol, 176
 	GETGLOB 21
 	PUSHCONT {
-		;; return
-		;; get member WaitingForTokens
+		.loc ../contracts/Vesting.sol, 177
+		DROP
 		PUSHINT 1
-		NIP
-		RET
+		.loc ../contracts/Vesting.sol, 0
 	}
 	IFNOTJMP
-	;; end if
-	;; if
-	;; push identifier revoked
+	.loc ../contracts/Vesting.sol, 179
 	GETGLOB 18
 	PUSHCONT {
-		;; return
-		;; get member Revoked
+		.loc ../contracts/Vesting.sol, 180
+		DROP
 		PUSHINT 5
-		NIP
-		RET
+		.loc ../contracts/Vesting.sol, 0
 	}
 	IFJMP
-	;; end if
-	;; if
-	;; push identifier balance
+	.loc ../contracts/Vesting.sol, 182
 	GETGLOB 22
 	PUSHCONT {
-		;; return
-		;; get member Released
+		.loc ../contracts/Vesting.sol, 183
+		DROP
 		PUSHINT 4
-		NIP
-		RET
+		.loc ../contracts/Vesting.sol, 0
 	}
 	IFNOTJMP
-	;; end if
-	;; if
-	;; push identifier now
+	.loc ../contracts/Vesting.sol, 185
 	NOW
-	;; <
-	;; push identifier startTime
 	GETGLOB 14
 	LESS
 	PUSHCONT {
-		;; return
-		;; get member Pending
+		.loc ../contracts/Vesting.sol, 186
+		DROP
 		PUSHINT 2
-		NIP
-		RET
+		.loc ../contracts/Vesting.sol, 0
 	}
 	IFJMP
-	;; end if
-	;; return
-	;; get member Active
+	.loc ../contracts/Vesting.sol, 188
+	DROP
 	PUSHINT 3
-	NIP
+	.loc ../contracts/Vesting.sol, 172
 }
 CALLX
-; end function _status
+.loc ../contracts/Vesting.sol, 0
 
 .globl	sendTokens_internal
 .type	sendTokens_internal, @function
 CALL $sendTokens_internal_macro$
 
 .macro sendTokens_internal_macro
-;; param: to
-;; param: amount
-;; param: sendGasTo
-; function sendTokens
-NEWC
-ENDC
-;; decl: payload
-;; Remote call ITONTokenWallet.transferToRecipient
-;; push identifier tokenWallet
+.loc ../contracts/Vesting.sol, 192
+PUSHREF {
+}
+.loc ../contracts/Vesting.sol, 193
+FALSE
+ROT
+PUSHINT 0
+DUP
+ROLL 5
+ROLL 6
+PUSHINT 0
 GETGLOB 19
 NEWC
 STSLICECONST x62_
 STSLICE
-PUSHINT 109
-STZEROES
-STSLICECONST 0
-STSLICECONST 1
+PUSHINT 1
+STUR 111
+ROLLREV 8
 NEWC
 STSLICECONST x3f10d1ab
-;; recipient_public_key
-PUSHINT 0
-STUR 256
-;; recipient_address
-;; push identifier to
-PUSH S5
-STSLICER
-;; tokens
-;; push identifier amount
-PUSH S4
-STUR 128
-;; deploy_grams
-PUSHINT 0
-STUR 128
-;; transfer_grams
-PUSHINT 0
-STUR 128
+STU 256
+STSLICE
+STU 128
+ROLLREV 5
 NEWC
-;; send_gas_to
-;; push identifier sendGasTo
-PUSH S4
-STSLICER
-;; notify_receiver
-FALSE
-STIR 1
-;; payload
-;; push identifier payload
-PUSH S3
-STREFR
+STU 128
+STU 128
+STSLICE
+STI 1
+STREF
 STBREFR
 STBREFR
 ENDC
 PUSHINT 128
 SENDRAWMSG
-DROP
-; end function sendTokens
-BLKDROP 3
+.loc ../contracts/Vesting.sol, 0
 
 .globl	_releasableAmount_internal
 .type	_releasableAmount_internal, @function
 CALL $_releasableAmount_internal_macro$
 
 .macro _releasableAmount_internal_macro
-;; ret param: retParam@0
+.loc ../contracts/Vesting.sol, 205
 PUSHINT 0
-; function _releasableAmount
 PUSHCONT {
-	;; if
-	;; push identifier now
+	.loc ../contracts/Vesting.sol, 206
 	NOW
-	;; <
-	;; push identifier lastWithdraw
 	GETGLOB 20
-	;; +
-	;; push identifier step
 	GETGLOB 16
 	ADD
 	UFITS 32
 	LESS
 	PUSHCONT {
-		;; return
+		.loc ../contracts/Vesting.sol, 207
+		DROP
 		PUSHINT 0
-		NIP
-		RET
+		.loc ../contracts/Vesting.sol, 0
 	}
 	IFJMP
-	;; end if
-	;; if
-	;; push identifier now
+	.loc ../contracts/Vesting.sol, 209
 	NOW
-	;; >=
-	;; push identifier startTime
 	GETGLOB 14
-	;; +
-	;; push identifier duration
 	GETGLOB 15
 	ADD
 	UFITS 32
 	GEQ
 	PUSHCONT {
-		;; return
-		;; push identifier initialBalance
+		.loc ../contracts/Vesting.sol, 210
+		DROP
 		GETGLOB 21
-		NIP
-		RET
+		.loc ../contracts/Vesting.sol, 0
 	}
 	PUSHCONT {
-		;; return
-		;; push identifier initialBalance
+		.loc ../contracts/Vesting.sol, 212
 		GETGLOB 21
-		;; /
-		;; push identifier duration
 		GETGLOB 15
-		;; /
-		;; push identifier step
 		GETGLOB 16
 		DIV
 		DIV
-		;; *
-		;; push identifier now
 		NOW
-		;; -
-		;; push identifier lastWithdraw
 		GETGLOB 20
 		SUB
 		UFITS 32
-		;; /
-		;; push identifier step
 		GETGLOB 16
 		DIV
 		MUL
 		UFITS 128
 		NIP
-		RET
+		.loc ../contracts/Vesting.sol, 0
 	}
 	CONDSEL
 	JMPX
-	;; end if
+	.loc ../contracts/Vesting.sol, 205
 }
 CALLX
-; end function _releasableAmount
+.loc ../contracts/Vesting.sol, 0
 
 .macro c7_to_c4
+GETGLOB 22
+GETGLOB 21
+GETGLOB 20
+GETGLOB 19
+GETGLOB 18
+GETGLOB 17
+GETGLOB 16
+GETGLOB 15
+GETGLOB 14
+GETGLOB 13
+GETGLOB 12
+GETGLOB 11
+GETGLOB 10
+GETGLOB 3
 GETGLOB 2
 NEWC
 STU 256
-GETGLOB 3
-STUR 64
-GETGLOB 6
-STUR 1
-NEWC
-GETGLOB 12
-GETGLOB 13
-GETGLOB 19
-REVERSE 4, 0
-STSLICE
-STSLICE
-STSLICE
-NEWC
-GETGLOB 21
-GETGLOB 22
-XCHG s2
-STU 128
-STU 128
-GETGLOB 10
-GETGLOB 11
-GETGLOB 14
-GETGLOB 15
-GETGLOB 16
-GETGLOB 17
-GETGLOB 18
-GETGLOB 20
-REVERSE 11, 0
-STBREF
-STBREF
+STU 64
+STONE
 STU 256
+ROLLREV 12
+NEWC
+STSLICE
+ROLLREV 11
+NEWC
+STSLICE
+ROLLREV 10
+NEWC
 STSLICE
 STU 32
 STU 32
 STU 32
 STI 1
 STI 1
+ROLLREV 4
+NEWC
+STSLICE
 STU 32
+STU 128
+STU 128
+STBREFR
+STBREFR
+STBREFR
+STBREFR
 ENDC
-POP C4
+POPROOT
 
 .macro c4_to_c7
 PUSHROOT
-CTOS        ; c4
-LDU 256      ; pubkey c4
-LDU 64      ; pubkey timestamp c4
-LDU 1       ; pubkey [timestamp] constructor_flag memory
-LDREFRTOS
+CTOS
+LDU 256 ; pubkey c4
+LDU 64 ; pubkey timestamp c4
+LDU 1 ; ctor flag
+NIP
+LDU 256
+LDREF
+ENDS
+CTOS
 LDMSGADDR
+LDREF
+ENDS
+CTOS
 LDMSGADDR
-SETGLOB 19
-SETGLOB 13
-SETGLOB 12
-LDREFRTOS
+LDREF
+ENDS
+CTOS
+LDMSGADDR
+LDU 32
+LDU 32
+LDU 32
+LDI 1
+LDI 1
+LDREF
+ENDS
+CTOS
+LDMSGADDR
+LDU 32
 LDU 128
-PLDU 128
+LDU 128
+ENDS
 SETGLOB 22
 SETGLOB 21
-LDU 256
-LDMSGADDR
-LDU 32
-LDU 32
-LDU 32
-LDI 1
-LDI 1
-PLDU 32
 SETGLOB 20
+SETGLOB 19
 SETGLOB 18
 SETGLOB 17
 SETGLOB 16
 SETGLOB 15
 SETGLOB 14
+SETGLOB 13
+SETGLOB 12
 SETGLOB 11
 SETGLOB 10
-TRUE
-SETGLOB 1   ; pubkey [timestamp] constructor_flag
-SETGLOB 6   ; pubkey [timestamp]
-SETGLOB 3   ; D
+SETGLOB 3
 SETGLOB 2
 
 .macro c4_to_c7_with_init_storage
 PUSHROOT
-CTOS        ; c4
-DUP        ; c4 c4
-SBITS      ; c4 bits
-GTINT 1    ; c4 bits>1
-PUSHCONT {
-	LDU 256      ; pubkey c4
-	LDU 64      ; pubkey timestamp c4
-	LDU 1       ; pubkey [timestamp] constructor_flag memory
-	LDREFRTOS
-	LDMSGADDR
-	LDMSGADDR
-	SETGLOB 19
-	SETGLOB 13
-	SETGLOB 12
-	LDREFRTOS
-	LDU 128
-	PLDU 128
-	SETGLOB 22
-	SETGLOB 21
-	LDU 256
-	LDMSGADDR
-	LDU 32
-	LDU 32
-	LDU 32
-	LDI 1
-	LDI 1
-	PLDU 32
-	SETGLOB 20
-	SETGLOB 18
-	SETGLOB 17
-	SETGLOB 16
-	SETGLOB 15
-	SETGLOB 14
-	SETGLOB 11
-	SETGLOB 10
-	TRUE
-	SETGLOB 1   ; pubkey [timestamp] constructor_flag
-	SETGLOB 6   ; pubkey [timestamp]
-	SETGLOB 3   ; D
-	SETGLOB 2
+CTOS
+SBITS
+GTINT 1
+PUSHREFCONT {
+	CALL $c4_to_c7$
 }
 PUSHCONT {
-	PLDDICT   ; D
-	; init _randomNonce
+	PUSHINT 0
+	PUSHROOT
+	CTOS
+	PLDDICT ; D
 	PUSHINT 1
-	PUSH S1
+	OVER
 	PUSHINT 64
 	DICTUGET
 	PUSHCONT {
@@ -1549,9 +1237,8 @@ PUSHCONT {
 	}
 	IFELSE
 	SETGLOB 10
-	; init owner
 	PUSHINT 2
-	PUSH S1
+	OVER
 	PUSHINT 64
 	DICTUGET
 	PUSHCONT {
@@ -1559,9 +1246,8 @@ PUSHCONT {
 	}
 	IFNOT
 	SETGLOB 11
-	; init tokenRoot
 	PUSHINT 3
-	PUSH S1
+	OVER
 	PUSHINT 64
 	DICTUGET
 	PUSHCONT {
@@ -1569,9 +1255,8 @@ PUSHCONT {
 	}
 	IFNOT
 	SETGLOB 12
-	; init beneficiary
 	PUSHINT 4
-	PUSH S1
+	OVER
 	PUSHINT 64
 	DICTUGET
 	PUSHCONT {
@@ -1579,9 +1264,8 @@ PUSHCONT {
 	}
 	IFNOT
 	SETGLOB 13
-	; init startTime
 	PUSHINT 5
-	PUSH S1
+	OVER
 	PUSHINT 64
 	DICTUGET
 	PUSHCONT {
@@ -1592,9 +1276,8 @@ PUSHCONT {
 	}
 	IFELSE
 	SETGLOB 14
-	; init duration
 	PUSHINT 6
-	PUSH S1
+	OVER
 	PUSHINT 64
 	DICTUGET
 	PUSHCONT {
@@ -1605,9 +1288,8 @@ PUSHCONT {
 	}
 	IFELSE
 	SETGLOB 15
-	; init step
 	PUSHINT 7
-	PUSH S1
+	OVER
 	PUSHINT 64
 	DICTUGET
 	PUSHCONT {
@@ -1618,9 +1300,8 @@ PUSHCONT {
 	}
 	IFELSE
 	SETGLOB 16
-	; init revocable
 	PUSHINT 8
-	PUSH S1
+	OVER
 	PUSHINT 64
 	DICTUGET
 	PUSHCONT {
@@ -1631,24 +1312,16 @@ PUSHCONT {
 	}
 	IFELSE
 	SETGLOB 17
-	; init revoked
 	PUSHINT 0
 	SETGLOB 18
-	; init tokenWallet
 	PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
 	SETGLOB 19
-	; init lastWithdraw
 	PUSHINT 0
 	SETGLOB 20
-	; init initialBalance
 	PUSHINT 0
 	SETGLOB 21
-	; init balance
 	PUSHINT 0
 	SETGLOB 22
-	; set contract pubkey
-	PUSHINT 0
-	SWAP
 	PUSHINT 64
 	DICTUGET
 	THROWIFNOT 61
@@ -1656,53 +1329,48 @@ PUSHCONT {
 	SETGLOB 2
 	PUSHINT 0 ; timestamp
 	SETGLOB 3
-	PUSHINT 0 ; constructor_flag
-	SETGLOB 6
-	TRUE
-	SETGLOB 1
 }
 IFELSE
 
 .internal-alias :main_internal, 0
 .internal :main_internal
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Function: main_internal
-;; param: contract_balance
-;; param: msg_balance
-;; param: int_msg_info
-;; param: msg_body_slice
-PUSHINT 0  ; main_external trans id
+PUSHROOT
+CTOS
+SBITS
+NEQINT 1
+SETGLOB 6
 PUSH S2
 CTOS
-LDU 4       ; bounced tail
-LDMSGADDR   ; bounced src tail
+LDU 4 ; bounced tail
+LDMSGADDR ; bounced src tail
 DROP
 SETGLOB 9
 MODPOW2 1
-; beg set default params for responsible func
 GETGLOB 4
-; bounce
 TRUE
 SETINDEXQ 1
-; tons
 PUSHINT 10000000
 SETINDEXQ 2
-; currency
 NULL
 SETINDEXQ 3
-; flag
 PUSHINT 0
 SETINDEXQ 4
 SETGLOB 4
-; end set default params for responsible func
 IFRET
-PUSH S1    ; body
-SEMPTY     ; isEmpty
-IFRET
-PUSH S1 ; body
-LDU 32  ; funcId body'
-PUSH S1 ; funcId body' funcId
-IFNOTRET
+OVER
+SEMPTY ; isEmpty
+IFJMPREF {
+	GETGLOB 6
+	THROWIFNOT 76
+}
+OVER
+LDUQ 32  ; [funcId] body' ok
+THROWIFNOT 60 ; funcId body'
+OVER
+IFNOTJMPREF {
+	GETGLOB 6
+	THROWIFNOT 76
+}
 SWAP
 CALLREF {
 	CALL $public_function_selector$
@@ -1713,10 +1381,14 @@ THROWIF 60
 
 .internal-alias :main_external, -1
 .internal :main_external
-PUSHINT -1 ; main_external trans id
+PUSHROOT
+CTOS
+SBITS
+NEQINT 1
+SETGLOB 6
 PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
 SETGLOB 9
-PUSH S1
+OVER
 CALLREF {
 	CALL $c4_to_c7_with_init_storage$
 }
@@ -1725,42 +1397,42 @@ SWAP
 PUSHCONT {
 	PUSHINT 512
 	LDSLICEX ; signatureSlice msgSlice
-	DUP      ; signatureSlice msgSlice msgSlice
-	HASHSU   ; signatureSlice msgSlice hashMsgSlice
-	SWAP  ; signatureSlice hashMsgSlice msgSlice
+	DUP
+	HASHSU ; signatureSlice msgSlice hashMsgSlice
+	SWAP
 	LDU 1 ; signatureSlice hashMsgSlice havePubkey msgSlice
-	SWAP  ; signatureSlice hashMsgSlice msgSlice havePubkey
+	SWAP
 	PUSHCONT {
-		LDU 256       ; signatureSlice hashMsgSlice pubkey msgSlice
-		XCHG s3
+		LDU 256 ; signatureSlice hashMsgSlice pubkey msgSlice
+		XCHG S3
 		SWAP
 	}
 	PUSHCONT {
-		XCHG s2
+		XCHG S2
 		GETGLOB 2
 	}
 	IFELSE
 	DUP
 	SETGLOB 5
-	CHKSIGNU      ; msgSlice isSigned
+	CHKSIGNU ; msgSlice isSigned
 	THROWIFNOT 40 ; msgSlice
 }
 PUSHCONT {
-	LDU 1      ; havePubkey msgSlice
-	SWAP       ; msgSlice havePubkey
+	LDU 1 ; havePubkey msgSlice
+	SWAP
 	THROWIF 58 ; msgSlice
 }
 IFELSE
-LDU 64                         ; timestamp msgSlice
-SWAP                           ; msgSlice timestamp
-CALL $replay_protection_macro$ ; msgSlice
-LDU 32  ; expireAt msgSlice
-SWAP    ; msgSlice expireAt
-NOW     ; msgSlice expireAt now
+LDU 64 ; timestamp msgSlice
+SWAP
+CALL $replay_protection_macro$
+LDU 32 ; expireAt msgSlice
+SWAP
+NOW ; msgSlice expireAt now
 GREATER ; msgSlice expireAt>now
 THROWIFNOT 57
-LDU  32 ; funcId body
-SWAP    ; body funcId
+LDU 32 ; funcId body
+SWAP
 CALLREF {
 	CALL $public_function_selector$
 }
@@ -1774,25 +1446,18 @@ ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-;; emitting 1 value
-DUP
-EQINT -1
+GETGLOB 10
+OVER
 PUSHCONT {
-	GETGLOB 10
+	PUSHSLICE xc0000000000000000000000000bb53331f
 	NEWC
-	PUSHSLICE xc0000000000000000000000002_
-	STSLICER
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xbb53331f
-	PUSH S1
-	STUR 256
+	STSLICE
+	STU 256
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 IF
-DROP
 TRUE
 SETGLOB 7
 
@@ -1802,25 +1467,18 @@ ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-;; emitting 1 value
-DUP
-EQINT -1
+GETGLOB 11
+OVER
 PUSHCONT {
-	GETGLOB 11
+	PUSHSLICE xc0000000000000000000000000df0bcfde
 	NEWC
-	PUSHSLICE xc0000000000000000000000002_
-	STSLICER
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xdf0bcfde
-	PUSH S1
-	STSLICER
+	STSLICE
+	STSLICE
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 IF
-DROP
 TRUE
 SETGLOB 7
 
@@ -1830,25 +1488,18 @@ ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-;; emitting 1 value
-DUP
-EQINT -1
+GETGLOB 12
+OVER
 PUSHCONT {
-	GETGLOB 12
+	PUSHSLICE xc0000000000000000000000000fcbfaaf2
 	NEWC
-	PUSHSLICE xc0000000000000000000000002_
-	STSLICER
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xfcbfaaf2
-	PUSH S1
-	STSLICER
+	STSLICE
+	STSLICE
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 IF
-DROP
 TRUE
 SETGLOB 7
 
@@ -1858,25 +1509,18 @@ ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-;; emitting 1 value
-DUP
-EQINT -1
+GETGLOB 13
+OVER
 PUSHCONT {
-	GETGLOB 13
+	PUSHSLICE xc0000000000000000000000000e10e8659
 	NEWC
-	PUSHSLICE xc0000000000000000000000002_
-	STSLICER
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xe10e8659
-	PUSH S1
-	STSLICER
+	STSLICE
+	STSLICE
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 IF
-DROP
 TRUE
 SETGLOB 7
 
@@ -1886,25 +1530,18 @@ ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-;; emitting 1 value
-DUP
-EQINT -1
+GETGLOB 14
+OVER
 PUSHCONT {
-	GETGLOB 14
+	PUSHSLICE xc0000000000000000000000000fcb81570
 	NEWC
-	PUSHSLICE xc0000000000000000000000002_
-	STSLICER
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xfcb81570
-	PUSH S1
-	STUR 32
+	STSLICE
+	STU 32
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 IF
-DROP
 TRUE
 SETGLOB 7
 
@@ -1914,25 +1551,18 @@ ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-;; emitting 1 value
-DUP
-EQINT -1
+GETGLOB 15
+OVER
 PUSHCONT {
-	GETGLOB 15
+	PUSHSLICE xc0000000000000000000000000b0d7f903
 	NEWC
-	PUSHSLICE xc0000000000000000000000002_
-	STSLICER
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xb0d7f903
-	PUSH S1
-	STUR 32
+	STSLICE
+	STU 32
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 IF
-DROP
 TRUE
 SETGLOB 7
 
@@ -1942,25 +1572,18 @@ ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-;; emitting 1 value
-DUP
-EQINT -1
+GETGLOB 16
+OVER
 PUSHCONT {
-	GETGLOB 16
+	PUSHSLICE xc0000000000000000000000000f0592b1d
 	NEWC
-	PUSHSLICE xc0000000000000000000000002_
-	STSLICER
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xf0592b1d
-	PUSH S1
-	STUR 32
+	STSLICE
+	STU 32
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 IF
-DROP
 TRUE
 SETGLOB 7
 
@@ -1970,25 +1593,18 @@ ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-;; emitting 1 value
-DUP
-EQINT -1
+GETGLOB 17
+OVER
 PUSHCONT {
-	GETGLOB 17
+	PUSHSLICE xc0000000000000000000000000e98bf2b0
 	NEWC
-	PUSHSLICE xc0000000000000000000000002_
-	STSLICER
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xe98bf2b0
-	PUSH S1
-	STIR 1
+	STSLICE
+	STI 1
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 IF
-DROP
 TRUE
 SETGLOB 7
 
@@ -1998,25 +1614,18 @@ ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-;; emitting 1 value
-DUP
-EQINT -1
+GETGLOB 18
+OVER
 PUSHCONT {
-	GETGLOB 18
+	PUSHSLICE xc0000000000000000000000000d1e947b9
 	NEWC
-	PUSHSLICE xc0000000000000000000000002_
-	STSLICER
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xd1e947b9
-	PUSH S1
-	STIR 1
+	STSLICE
+	STI 1
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 IF
-DROP
 TRUE
 SETGLOB 7
 
@@ -2026,25 +1635,18 @@ ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-;; emitting 1 value
-DUP
-EQINT -1
+GETGLOB 19
+OVER
 PUSHCONT {
-	GETGLOB 19
+	PUSHSLICE xc0000000000000000000000000f1030b6b
 	NEWC
-	PUSHSLICE xc0000000000000000000000002_
-	STSLICER
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xf1030b6b
-	PUSH S1
-	STSLICER
+	STSLICE
+	STSLICE
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 IF
-DROP
 TRUE
 SETGLOB 7
 
@@ -2054,25 +1656,18 @@ ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-;; emitting 1 value
-DUP
-EQINT -1
+GETGLOB 20
+OVER
 PUSHCONT {
-	GETGLOB 20
+	PUSHSLICE xc0000000000000000000000000d0f9f227
 	NEWC
-	PUSHSLICE xc0000000000000000000000002_
-	STSLICER
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xd0f9f227
-	PUSH S1
-	STUR 32
+	STSLICE
+	STU 32
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 IF
-DROP
 TRUE
 SETGLOB 7
 
@@ -2082,25 +1677,18 @@ ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-;; emitting 1 value
-DUP
-EQINT -1
+GETGLOB 21
+OVER
 PUSHCONT {
-	GETGLOB 21
+	PUSHSLICE xc0000000000000000000000000accb8d68
 	NEWC
-	PUSHSLICE xc0000000000000000000000002_
-	STSLICER
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xaccb8d68
-	PUSH S1
-	STUR 128
+	STSLICE
+	STU 128
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 IF
-DROP
 TRUE
 SETGLOB 7
 
@@ -2110,37 +1698,30 @@ ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-;; emitting 1 value
-DUP
-EQINT -1
+GETGLOB 22
+OVER
 PUSHCONT {
-	GETGLOB 22
+	PUSHSLICE xc0000000000000000000000000866db788
 	NEWC
-	PUSHSLICE xc0000000000000000000000002_
-	STSLICER
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST x866db788
-	PUSH S1
-	STUR 128
+	STSLICE
+	STU 128
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 IF
-DROP
 TRUE
 SETGLOB 7
 
 .macro public_function_selector
 DUP
-PUSHINT 995308319
+PUSHINT 1756716863
 LEQ
-PUSHCONT {
+IFJMPREF {
 	DUP
-	PUSHINT 206309131
+	PUSHINT 751537512
 	LEQ
-	PUSHCONT {
+	IFJMPREF {
 		DUP
 		PUSHINT 107853704
 		EQUAL
@@ -2153,12 +1734,6 @@ PUSHCONT {
 		IFJMPREF {
 			CALL $onGetBalanceRevoke$
 		}
-	}
-	IFJMP
-	DUP
-	PUSHINT 751537512
-	LEQ
-	PUSHCONT {
 		DUP
 		PUSHINT 292780380
 		EQUAL
@@ -2172,11 +1747,10 @@ PUSHCONT {
 			CALL $initialBalance$
 		}
 	}
-	IFJMP
 	DUP
-	PUSHINT 995308319
+	PUSHINT 1286874325
 	LEQ
-	PUSHCONT {
+	IFJMPREF {
 		DUP
 		PUSHINT 819460355
 		EQUAL
@@ -2189,18 +1763,6 @@ PUSHCONT {
 		IFJMPREF {
 			CALL $_randomNonce$
 		}
-	}
-	IFJMP
-}
-IFJMP
-DUP
-PUSHINT 1497440185
-LEQ
-PUSHCONT {
-	DUP
-	PUSHINT 1286874325
-	LEQ
-	PUSHCONT {
 		DUP
 		PUSHINT 1013166213
 		EQUAL
@@ -2214,11 +1776,10 @@ PUSHCONT {
 			CALL $revoke$
 		}
 	}
-	IFJMP
 	DUP
-	PUSHINT 1374242745
+	PUSHINT 1497440185
 	LEQ
-	PUSHCONT {
+	IFJMPREF {
 		DUP
 		PUSHINT 1358557735
 		EQUAL
@@ -2231,12 +1792,6 @@ PUSHCONT {
 		IFJMPREF {
 			CALL $revoked$
 		}
-	}
-	IFJMP
-	DUP
-	PUSHINT 1497440185
-	LEQ
-	PUSHCONT {
 		DUP
 		PUSHINT 1471111318
 		EQUAL
@@ -2250,17 +1805,10 @@ PUSHCONT {
 			CALL $tokensReceivedCallback$
 		}
 	}
-	IFJMP
-}
-IFJMP
-DUP
-PUSHINT 1770779312
-LEQ
-PUSHCONT {
 	DUP
-	PUSHINT 1628341849
+	PUSHINT 1756716863
 	LEQ
-	PUSHCONT {
+	IFJMPREF {
 		DUP
 		PUSHINT 1594609630
 		EQUAL
@@ -2273,12 +1821,6 @@ PUSHCONT {
 		IFJMPREF {
 			CALL $beneficiary$
 		}
-	}
-	IFJMP
-	DUP
-	PUSHINT 1756716863
-	LEQ
-	PUSHCONT {
 		DUP
 		PUSHINT 1733341040
 		EQUAL
@@ -2292,11 +1834,15 @@ PUSHCONT {
 			CALL $constructor$
 		}
 	}
-	IFJMP
+}
+DUP
+PUSHINT 2092935922
+LEQ
+IFJMPREF {
 	DUP
-	PUSHINT 1770779312
+	PUSHINT 1896024939
 	LEQ
-	PUSHCONT {
+	IFJMPREF {
 		DUP
 		PUSHINT 1761331590
 		EQUAL
@@ -2309,37 +1855,35 @@ PUSHCONT {
 		IFJMPREF {
 			CALL $revocable$
 		}
-	}
-	IFJMP
-}
-IFJMP
-DUP
-PUSHINT 2092935922
-LEQ
-PUSHCONT {
-	DUP
-	PUSHINT 1884891933
-	EQUAL
-	IFJMPREF {
-		CALL $step$
-	}
-	DUP
-	PUSHINT 1896024939
-	EQUAL
-	IFJMPREF {
-		CALL $tokenWallet$
-	}
-	DUP
-	PUSHINT 2092438896
-	EQUAL
-	IFJMPREF {
-		CALL $startTime$
+		DUP
+		PUSHINT 1884891933
+		EQUAL
+		IFJMPREF {
+			CALL $step$
+		}
+		DUP
+		PUSHINT 1896024939
+		EQUAL
+		IFJMPREF {
+			CALL $tokenWallet$
+		}
 	}
 	DUP
 	PUSHINT 2092935922
-	EQUAL
+	LEQ
 	IFJMPREF {
-		CALL $tokenRoot$
+		DUP
+		PUSHINT 2092438896
+		EQUAL
+		IFJMPREF {
+			CALL $startTime$
+		}
+		DUP
+		PUSHINT 2092935922
+		EQUAL
+		IFJMPREF {
+			CALL $tokenRoot$
+		}
 	}
 }
-IFJMP
+

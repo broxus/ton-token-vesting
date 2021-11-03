@@ -1,4 +1,4 @@
-pragma ton-solidity ^0.39.0;
+pragma ton-solidity >= 0.39.0;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 pragma AbiHeader expire;
@@ -6,10 +6,10 @@ pragma AbiHeader expire;
 import "Errors.sol";
 import "Gas.sol";
 
-import "../node_modules/ton-eth-bridge-token-contracts/free-ton/contracts/interfaces/IRootTokenContract.sol";
-import "../node_modules/ton-eth-bridge-token-contracts/free-ton/contracts/interfaces/ITONTokenWallet.sol";
-import "../node_modules/ton-eth-bridge-token-contracts/free-ton/contracts/interfaces/ITokensReceivedCallback.sol";
-import "../node_modules/ton-eth-bridge-token-contracts/free-ton/contracts/interfaces/IExpectedWalletAddressCallback.sol";
+import "./interfaces/tokens/IRootTokenContract.sol";
+import "./interfaces/tokens/ITONTokenWallet.sol";
+import "./interfaces/tokens/ITokensReceivedCallback.sol";
+import "./interfaces/tokens/IExpectedWalletAddressCallback.sol";
 import "../node_modules/@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "../node_modules/@broxus/contracts/contracts/utils/RandomNonce.sol";
 

@@ -41,7 +41,7 @@ async function main() {
           duration: VESTING_PARAMS.duration,
           step: VESTING_PARAMS.step,
           revocable: VESTING_PARAMS.revocable,
-          _answer_id: 240
+          answerId: 240
         }
       }
     )

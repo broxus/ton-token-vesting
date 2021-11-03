@@ -1,33 +1,21 @@
+.version sol 0.49.0
+
 .macro constructor
 DROP
-GETGLOB 1
+GETGLOB 2
 ISNULL
 IFREF {
 	CALL $c4_to_c7_with_init_storage$
 }
-;; constructor protection
 GETGLOB 6
 THROWIF 51
-PUSHINT 1
-SETGLOB 6
-;; end constructor protection
-; Decode input parameters
-; Decode code
-;; decode TvmCell
 LDREF
 ENDS
-;; param: code
-; constructor VestingFactory
+.loc ../contracts/VestingFactory.sol, 19
 ACCEPT
-; expValue
-; end expValue
-;; push identifier code
-DUP
-; colValue
+.loc ../contracts/VestingFactory.sol, 20
 SETGLOB 11
-; end colValue
-; end constructor VestingFactory
-DROP
+.loc ../contracts/VestingFactory.sol, 0
 CALLREF {
 	CALL $c7_to_c4$
 }
@@ -36,63 +24,61 @@ SETGLOB 7
 
 .macro deployVesting
 DROP
-GETGLOB 1
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
 ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
+.loc ../contracts/VestingFactory.sol, 23
 LDU 32
 GETGLOB 4
 ROT
 SETINDEXQ 5
 SETGLOB 4
-; Decode input parameters
-; Decode tokenRoot
-LDMSGADDR
-; Decode beneficiary
 LDMSGADDRQ
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
 	LDMSGADDR
 }
 IFNOT
-; Decode startTime
+LDMSGADDRQ
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+	LDMSGADDR
+}
+IFNOT
 LDUQ 32
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
 	LDU 32
 }
 IFNOT
-; Decode duration
 LDUQ 32
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
 	LDU 32
 }
 IFNOT
-; Decode step
 LDUQ 32
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
 	LDU 32
 }
 IFNOT
-; Decode revocable
 LDIQ 1
 PUSHCONT {
-	;; load next cell
 	LDREF
 	ENDS
 	CTOS
@@ -100,18 +86,11 @@ PUSHCONT {
 }
 IFNOT
 ENDS
-;; param: tokenRoot
-;; param: beneficiary
-;; param: startTime
-;; param: duration
-;; param: step
-;; param: revocable
+.loc ../contracts/VestingFactory.sol, 0
 CALLREF {
 	CALL $deployVesting_internal_macro$
 }
-;; emitting 1 value(s)
-PUSH S1
-EQINT -1
+OVER
 PUSHCONT {
 	PUSH S3
 	CTOS
@@ -122,13 +101,13 @@ PUSHCONT {
 	NEWC
 	STSLICECONST xc
 	STSLICE
-	PUSHINT 96
-	STZEROES
-	STSLICECONST 0
-	STSLICECONST 0
+	PUSHINT 1
+	STUR 98
+	SWAP
+	NEWC
 	STSLICECONST xd3c4ddaa
-	PUSH S1
-	STSLICER
+	STSLICE
+	STBREFR
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
@@ -137,10 +116,10 @@ PUSHCONT {
 	GETGLOB 4
 	DUP
 	INDEX 3
-	PUSH S1
+	OVER
 	INDEX 2
 	GETGLOB 9
-	BLKSWAP 1, 3
+	ROLL 3
 	INDEX 1
 	NEWC
 	PUSHINT 2
@@ -152,22 +131,21 @@ PUSHCONT {
 	SWAP
 	STGRAMS
 	STDICT
-	PUSHINT 104
-	STZEROES
-	STSLICECONST 0
-	STSLICECONST 0
+	PUSHINT 1
+	STUR 106
+	SWAP
+	NEWC
 	GETGLOB 4
 	INDEX 5
 	STUR 32
-	PUSH S1
-	STSLICER
+	STSLICE
+	STBREFR
 	ENDC
 	GETGLOB 4
 	INDEX 4
 	SENDRAWMSG
 }
 IFELSE
-DROP
 CALLREF {
 	CALL $c7_to_c4$
 }
@@ -179,71 +157,52 @@ SETGLOB 7
 CALL $deployVesting_internal_macro$
 
 .macro deployVesting_internal_macro
-;; param: tokenRoot
-;; param: beneficiary
-;; param: startTime
-;; param: duration
-;; param: step
-;; param: revocable
-; function deployVesting
-;; get member value
-CALLREF {
-	CALL $message_balance_macro$
-}
-;; >=
+.loc ../contracts/VestingFactory.sol, 31
+DEPTH
+ADDCONST -2
+PICK
 PUSHINT 2000000000
-;; +
 PUSHINT 500000000
 ADD
 UFITS 128
 GEQ
 THROWIFNOT 104
-;; get member value
-;; push identifier beneficiary
+.loc ../contracts/VestingFactory.sol, 33
 PUSH S4
 PARSEMSGADDR
 INDEX 3
 PLDU 256
-NEQINT 0
 THROWIFNOT 105
-;; push identifier step
-PUSH S1
-;; <=
-;; push identifier duration
-PUSH S3
+.loc ../contracts/VestingFactory.sol, 34
+PUSH2 S1, S2
 LEQ
 THROWIFNOT 106
-;; get member value
-;; push identifier tokenRoot
+.loc ../contracts/VestingFactory.sol, 35
 PUSH S5
 PARSEMSGADDR
 INDEX 3
 PLDU 256
-NEQINT 0
 THROWIFNOT 107
-;; push identifier duration
+.loc ../contracts/VestingFactory.sol, 36
 PUSH S2
 GTINT 0
 THROWIFNOT 108
-;; push identifier startTime
+.loc ../contracts/VestingFactory.sol, 37
 PUSH S3
-;; >
-;; push identifier now
 NOW
 GREATER
 THROWIFNOT 109
-;; get member balance
+.loc ../contracts/VestingFactory.sol, 39
 GETPARAM 7
 INDEX 0
-;; -
-;; get member value
-CALLREF {
-	CALL $message_balance_macro$
-}
+DEPTH
+ADDCONST -2
+PICK
 SUB
 UFITS 128
 PUSHINT 2
 RAWRESERVE
+.loc ../contracts/VestingFactory.sol, 41
 NEWDICT
 PUSHINT 0
 NEWC
@@ -252,7 +211,6 @@ PUSHINT 0
 ROT
 PUSHINT 64
 DICTUSETB
-;; push identifier nonce
 GETGLOB 12
 NEWC
 STU 256
@@ -260,50 +218,43 @@ PUSHINT 1
 ROT
 PUSHINT 64
 DICTUSETB
-;; get member sender
 GETGLOB 9
 PUSHINT 2
 ROT
 PUSHINT 64
 DICTUSET
-;; push identifier tokenRoot
-PUSH S6
+ROLL 6
 PUSHINT 3
 ROT
 PUSHINT 64
 DICTUSET
-;; push identifier beneficiary
-PUSH S5
+ROLL 5
 PUSHINT 4
 ROT
 PUSHINT 64
 DICTUSET
-;; push identifier startTime
-PUSH S4
+ROLL 4
 NEWC
 STU 32
 PUSHINT 5
 ROT
 PUSHINT 64
 DICTUSETB
-;; push identifier duration
-PUSH S3
+ROLL 3
 NEWC
 STU 32
 PUSHINT 6
 ROT
 PUSHINT 64
 DICTUSETB
-;; push identifier step
-PUSH S2
+ROT
 NEWC
 STU 32
 PUSHINT 7
 ROT
 PUSHINT 64
 DICTUSETB
-;; push identifier revocable
-PUSH S1
+SWAP
 NEWC
 STI 1
 PUSHINT 8
@@ -313,7 +264,6 @@ DICTUSETB
 NEWC
 STDICT
 ENDC
-;; push identifier vestingCode
 GETGLOB 11
 NEWC
 STSLICECONST x2_
@@ -321,18 +271,11 @@ STOPTREF
 STOPTREF
 STZERO
 ENDC
-;; decl: stateInit
-;; ++
-; expValue
-;; fetch nonce
+.loc ../contracts/VestingFactory.sol, 56
 GETGLOB 12
-; end expValue
 INC
-; colValue
 SETGLOB 12
-; end colValue
-;; push identifier stateInit
-DUP
+.loc ../contracts/VestingFactory.sol, 57
 DUP
 HASHCU
 NEWC
@@ -340,102 +283,75 @@ STSLICECONST x801_
 STU 256
 ENDC
 CTOS
-PUSHINT 2000000000
-PUSH S1
+SWAP
+OVER
 NEWC
 STSLICECONST x62_
 STSLICE
-SWAP
-STGRAMS
-PUSHINT 105
-STZEROES
-STSLICECONST xc_
-STSLICECONST 1
-PUSH S2
-STREFR
-STSLICECONST 0
-STSLICECONST x68b55f3f
+PUSHSLICE x477359400000000000000000000000000007_
+STSLICER
+STREF
+STSLICECONST x345aaf9fc_
 ENDC
 PUSHINT 1
 SENDRAWMSG
-NIP
-;; decl: vesting
-;; return
+.loc ../contracts/VestingFactory.sol, 62
 GETGLOB 4
 PUSHINT 0
 SETINDEXQ 2
 PUSHINT 128
 SETINDEXQ 4
 SETGLOB 4
-;; push identifier vesting
-DUP
-BLKDROP2 2, 1
-; end function deployVesting
-BLKDROP2 6, 1
+.loc ../contracts/VestingFactory.sol, 0
 
 .macro c7_to_c4
+GETGLOB 12
+GETGLOB 11
+GETGLOB 10
+GETGLOB 3
 GETGLOB 2
 NEWC
 STU 256
-GETGLOB 3
-STUR 64
-GETGLOB 6
-STUR 1
-GETGLOB 10
-GETGLOB 11
-GETGLOB 12
-REVERSE 4, 0
+STU 64
+STONE
 STU 256
 STREF
 STU 256
 ENDC
-POP C4
+POPROOT
 
 .macro c4_to_c7
 PUSHROOT
-CTOS        ; c4
-LDU 256      ; pubkey c4
-LDU 64      ; pubkey timestamp c4
-LDU 1       ; pubkey [timestamp] constructor_flag memory
+CTOS
+LDU 256 ; pubkey c4
+LDU 64 ; pubkey timestamp c4
+LDU 1 ; ctor flag
+NIP
 LDU 256
 LDREF
-PLDU 256
+LDU 256
+ENDS
 SETGLOB 12
 SETGLOB 11
 SETGLOB 10
-TRUE
-SETGLOB 1   ; pubkey [timestamp] constructor_flag
-SETGLOB 6   ; pubkey [timestamp]
-SETGLOB 3   ; D
+SETGLOB 3
 SETGLOB 2
 
 .macro c4_to_c7_with_init_storage
 PUSHROOT
-CTOS        ; c4
-DUP        ; c4 c4
-SBITS      ; c4 bits
-GTINT 1    ; c4 bits>1
-PUSHCONT {
-	LDU 256      ; pubkey c4
-	LDU 64      ; pubkey timestamp c4
-	LDU 1       ; pubkey [timestamp] constructor_flag memory
-	LDU 256
-	LDREF
-	PLDU 256
-	SETGLOB 12
-	SETGLOB 11
-	SETGLOB 10
-	TRUE
-	SETGLOB 1   ; pubkey [timestamp] constructor_flag
-	SETGLOB 6   ; pubkey [timestamp]
-	SETGLOB 3   ; D
-	SETGLOB 2
+CTOS
+SBITS
+GTINT 1
+PUSHREFCONT {
+	CALL $c4_to_c7$
 }
 PUSHCONT {
-	PLDDICT   ; D
-	; init _randomNonce
+	PUSHINT 0
+	PUSHROOT
+	CTOS
+	PLDDICT ; D
 	PUSHINT 1
-	PUSH S1
+	OVER
 	PUSHINT 64
 	DICTUGET
 	PUSHCONT {
@@ -446,16 +362,11 @@ PUSHCONT {
 	}
 	IFELSE
 	SETGLOB 10
-	; init vestingCode
-	NEWC
-	ENDC
+	PUSHREF {
+	}
 	SETGLOB 11
-	; init nonce
 	PUSHINT 0
 	SETGLOB 12
-	; set contract pubkey
-	PUSHINT 0
-	SWAP
 	PUSHINT 64
 	DICTUGET
 	THROWIFNOT 61
@@ -463,11 +374,6 @@ PUSHCONT {
 	SETGLOB 2
 	PUSHINT 0 ; timestamp
 	SETGLOB 3
-	PUSHINT 0 ; constructor_flag
-	SETGLOB 6
-	TRUE
-	SETGLOB 1
-	;; init state var: nonce
 	PUSHINT 0
 	SETGLOB 12
 }
@@ -475,44 +381,43 @@ IFELSE
 
 .internal-alias :main_internal, 0
 .internal :main_internal
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Function: main_internal
-;; param: contract_balance
-;; param: msg_balance
-;; param: int_msg_info
-;; param: msg_body_slice
-PUSHINT 0  ; main_external trans id
+PUSHROOT
+CTOS
+SBITS
+NEQINT 1
+SETGLOB 6
 PUSH S2
 CTOS
-LDU 4       ; bounced tail
-LDMSGADDR   ; bounced src tail
+LDU 4 ; bounced tail
+LDMSGADDR ; bounced src tail
 DROP
 SETGLOB 9
 MODPOW2 1
-; beg set default params for responsible func
 GETGLOB 4
-; bounce
 TRUE
 SETINDEXQ 1
-; tons
 PUSHINT 10000000
 SETINDEXQ 2
-; currency
 NULL
 SETINDEXQ 3
-; flag
 PUSHINT 0
 SETINDEXQ 4
 SETGLOB 4
-; end set default params for responsible func
 IFRET
-PUSH S1    ; body
-SEMPTY     ; isEmpty
-IFRET
-PUSH S1 ; body
-LDU 32  ; funcId body'
-PUSH S1 ; funcId body' funcId
-IFNOTRET
+OVER
+SEMPTY ; isEmpty
+IFJMPREF {
+	GETGLOB 6
+	THROWIFNOT 76
+}
+OVER
+LDUQ 32  ; [funcId] body' ok
+THROWIFNOT 60 ; funcId body'
+OVER
+IFNOTJMPREF {
+	GETGLOB 6
+	THROWIFNOT 76
+}
 SWAP
 CALLREF {
 	CALL $public_function_selector$
@@ -523,10 +428,14 @@ THROWIF 60
 
 .internal-alias :main_external, -1
 .internal :main_external
-PUSHINT -1 ; main_external trans id
+PUSHROOT
+CTOS
+SBITS
+NEQINT 1
+SETGLOB 6
 PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
 SETGLOB 9
-PUSH S1
+OVER
 CALLREF {
 	CALL $c4_to_c7_with_init_storage$
 }
@@ -535,19 +444,19 @@ SWAP
 PUSHCONT {
 	PUSHINT 512
 	LDSLICEX ; signatureSlice msgSlice
-	DUP      ; signatureSlice msgSlice msgSlice
-	HASHSU   ; signatureSlice msgSlice hashMsgSlice
+	DUP
+	HASHSU ; signatureSlice msgSlice hashMsgSlice
 	ROT
 	GETGLOB 2
-	CHKSIGNU      ; msgSlice isSigned
+	CHKSIGNU ; msgSlice isSigned
 	THROWIFNOT 40 ; msgSlice
 }
 IF
-LDU 64                         ; timestamp msgSlice
-SWAP                           ; msgSlice timestamp
-CALL $replay_protection_macro$ ; msgSlice
-LDU  32 ; funcId body
-SWAP    ; body funcId
+LDU 64 ; timestamp msgSlice
+SWAP
+CALL $replay_protection_macro$
+LDU 32 ; funcId body
+SWAP
 CALLREF {
 	CALL $public_function_selector$
 }
@@ -561,25 +470,18 @@ ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-;; emitting 1 value
-DUP
-EQINT -1
+GETGLOB 10
+OVER
 PUSHCONT {
-	GETGLOB 10
+	PUSHSLICE xc0000000000000000000000000bb53331f
 	NEWC
-	PUSHSLICE xc0000000000000000000000002_
-	STSLICER
-	STSLICECONST 0
-	STSLICECONST 0
-	STSLICECONST xbb53331f
-	PUSH S1
-	STUR 256
+	STSLICE
+	STU 256
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 IF
-DROP
 TRUE
 SETGLOB 7
 
@@ -602,3 +504,4 @@ EQUAL
 IFJMPREF {
 	CALL $deployVesting$
 }
+

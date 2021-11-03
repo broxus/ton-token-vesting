@@ -1,4 +1,4 @@
-pragma ton-solidity ^0.39.0;
+pragma ton-solidity >= 0.39.0;
 
 library Errors {
     uint8 constant NOT_OWNER                 = 101;
