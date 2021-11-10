@@ -148,11 +148,10 @@ contract Vesting is ITokensReceivedCallback, RandomNonce {
         uint128 /*updated_balance*/,
         TvmCell /*payload*/
     ) override public {
-        require(msg.sender.value != 0 && msg.sender == tokenWallet_, Errors.WRONG_SENDER);
+        require(msg.sender.value != 0 && msg.sender == tokenWallet && tokenWallet == tokenWallet_, Errors.WRONG_SENDER);
         _reserve();
 
         if (
-            tokenWallet_ == tokenWallet &&
             senderAddress == owner &&
             _status() == Status.WaitingForTokens
         ) {
