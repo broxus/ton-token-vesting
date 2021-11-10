@@ -9,6 +9,18 @@ import "../node_modules/@broxus/contracts/contracts/utils/RandomNonce.sol";
 
 
 contract VestingFactory is RandomNonce {
+
+    event VestingDeployed(
+        address vesting,
+        uint nonce,
+        address tokenRoot,
+        address beneficiary,
+        uint32 startTime,
+        uint32 duration,
+        uint32 step,
+        bool revocable
+    );
+
     uint128 constant FACTORY_DEPLOY_VALUE = 0.5 ton;
 
     TvmCell vestingCode;
@@ -18,6 +30,10 @@ contract VestingFactory is RandomNonce {
     constructor(TvmCell code) public {
         tvm.accept();
         vestingCode = code;
+    }
+
+    function getVestingCode() external view responsible returns(TvmCell) {
+        return { value: 0, bounce: false, flag: MsgFlag.REMAINING_GAS } vestingCode;
     }
 
     function deployVesting(
@@ -38,10 +54,12 @@ contract VestingFactory is RandomNonce {
 
         tvm.rawReserve(address(this).balance - msg.value, 2);
 
+        uint nonce_ = nonce;
+
         TvmCell stateInit = tvm.buildStateInit({
             contr: Vesting,
             varInit: {
-                _randomNonce: nonce,
+                _randomNonce: nonce_,
                 owner: msg.sender,
                 tokenRoot: tokenRoot,
                 beneficiary: beneficiary,
@@ -53,12 +71,27 @@ contract VestingFactory is RandomNonce {
             pubkey: 0,
             code: vestingCode
         });
+
         nonce++;
+
         address vesting = new Vesting{
             value: Gas.DEPLOY_VALUE,
             flag: MsgFlag.SENDER_PAYS_FEES,
             stateInit: stateInit
         }();
+
+        emit VestingDeployed(
+            vesting,
+            nonce_,
+            tokenRoot,
+            beneficiary,
+            startTime,
+            duration,
+            step,
+            revocable
+        );
+
         return {value: 0, flag: MsgFlag.ALL_NOT_RESERVED} vesting;
     }
+
 }

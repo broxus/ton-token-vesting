@@ -73,13 +73,13 @@
 		{
 			"name": "tokensReceivedCallback",
 			"inputs": [
-				{"name":"token_wallet","type":"address"},
+				{"name":"tokenWallet_","type":"address"},
 				{"name":"value1","type":"address"},
-				{"name":"tokens_amount","type":"uint128"},
+				{"name":"tokensAmount","type":"uint128"},
 				{"name":"value3","type":"uint256"},
-				{"name":"value4","type":"address"},
-				{"name":"sender_wallet","type":"address"},
-				{"name":"original_gas_to","type":"address"},
+				{"name":"senderAddress","type":"address"},
+				{"name":"senderWallet","type":"address"},
+				{"name":"originalGasTo","type":"address"},
 				{"name":"value7","type":"uint128"},
 				{"name":"value8","type":"cell"}
 			],
@@ -87,11 +87,9 @@
 			]
 		},
 		{
-			"name": "expectedWalletAddressCallback",
+			"name": "onTokenWallet",
 			"inputs": [
-				{"name":"wallet","type":"address"},
-				{"name":"value1","type":"uint256"},
-				{"name":"owner_address","type":"address"}
+				{"name":"wallet","type":"address"}
 			],
 			"outputs": [
 			]
@@ -212,6 +210,40 @@
 		{"key":8,"name":"revocable","type":"bool"}
 	],
 	"events": [
+		{
+			"name": "TokensSent",
+			"inputs": [
+				{"name":"to","type":"address"},
+				{"name":"amount","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "TokensReceived",
+			"inputs": [
+				{"name":"from","type":"address"},
+				{"name":"amount","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "RevokeCalled",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "ReleaseCalled",
+			"inputs": [
+				{"name":"timespamp","type":"uint32"},
+				{"name":"amount","type":"uint128"}
+			],
+			"outputs": [
+			]
+		}
 	],
 	"fields": [
 		{"name":"_pubkey","type":"uint256"},

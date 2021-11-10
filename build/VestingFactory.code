@@ -11,12 +11,94 @@ GETGLOB 6
 THROWIF 51
 LDREF
 ENDS
-.loc ../contracts/VestingFactory.sol, 19
+.loc ../contracts/VestingFactory.sol, 31
 ACCEPT
-.loc ../contracts/VestingFactory.sol, 20
+.loc ../contracts/VestingFactory.sol, 32
 SETGLOB 11
 .loc ../contracts/VestingFactory.sol, 0
 CALLREF {
+	CALL $c7_to_c4$
+}
+TRUE
+SETGLOB 7
+
+.macro getVestingCode
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc ../contracts/VestingFactory.sol, 35
+LDU 32
+GETGLOB 4
+ROT
+SETINDEXQ 5
+SETGLOB 4
+ENDS
+.loc ../contracts/VestingFactory.sol, 36
+GETGLOB 4
+PUSHINT 0
+SETINDEXQ 2
+FALSE
+SETINDEXQ 1
+PUSHINT 64
+SETINDEXQ 4
+SETGLOB 4
+GETGLOB 11
+.loc ../contracts/VestingFactory.sol, 0
+OVER
+PUSHCONT {
+	PUSH S3
+	CTOS
+	LDU 2
+	LDMSGADDR
+	DROP
+	NIP
+	NEWC
+	STSLICECONST xc
+	STSLICE
+	PUSHSLICE x0000000000000000000000002249e4b7e_
+	STSLICER
+	STREF
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+PUSHCONT {
+	GETGLOB 4
+	DUP
+	INDEX 3
+	OVER
+	INDEX 2
+	GETGLOB 9
+	ROLL 3
+	INDEX 1
+	NEWC
+	PUSHINT 2
+	STZEROES
+	STI 1
+	PUSHINT 3
+	STZEROES
+	STSLICE
+	SWAP
+	STGRAMS
+	STDICT
+	PUSHINT 106
+	STZEROES
+	GETGLOB 4
+	INDEX 5
+	STUR 32
+	STREF
+	ENDC
+	GETGLOB 4
+	INDEX 4
+	SENDRAWMSG
+}
+IFELSE
+IFREF {
 	CALL $c7_to_c4$
 }
 TRUE
@@ -31,7 +113,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/VestingFactory.sol, 23
+.loc ../contracts/VestingFactory.sol, 39
 LDU 32
 GETGLOB 4
 ROT
@@ -157,7 +239,7 @@ SETGLOB 7
 CALL $deployVesting_internal_macro$
 
 .macro deployVesting_internal_macro
-.loc ../contracts/VestingFactory.sol, 31
+.loc ../contracts/VestingFactory.sol, 47
 DEPTH
 ADDCONST -2
 PICK
@@ -167,32 +249,32 @@ ADD
 UFITS 128
 GEQ
 THROWIFNOT 104
-.loc ../contracts/VestingFactory.sol, 33
+.loc ../contracts/VestingFactory.sol, 49
 PUSH S4
 PARSEMSGADDR
 INDEX 3
 PLDU 256
 THROWIFNOT 105
-.loc ../contracts/VestingFactory.sol, 34
+.loc ../contracts/VestingFactory.sol, 50
 PUSH2 S1, S2
 LEQ
 THROWIFNOT 106
-.loc ../contracts/VestingFactory.sol, 35
+.loc ../contracts/VestingFactory.sol, 51
 PUSH S5
 PARSEMSGADDR
 INDEX 3
 PLDU 256
 THROWIFNOT 107
-.loc ../contracts/VestingFactory.sol, 36
+.loc ../contracts/VestingFactory.sol, 52
 PUSH S2
 GTINT 0
 THROWIFNOT 108
-.loc ../contracts/VestingFactory.sol, 37
+.loc ../contracts/VestingFactory.sol, 53
 PUSH S3
 NOW
 GREATER
 THROWIFNOT 109
-.loc ../contracts/VestingFactory.sol, 39
+.loc ../contracts/VestingFactory.sol, 55
 GETPARAM 7
 INDEX 0
 DEPTH
@@ -202,7 +284,9 @@ SUB
 UFITS 128
 PUSHINT 2
 RAWRESERVE
-.loc ../contracts/VestingFactory.sol, 41
+.loc ../contracts/VestingFactory.sol, 57
+GETGLOB 12
+.loc ../contracts/VestingFactory.sol, 59
 NEWDICT
 PUSHINT 0
 NEWC
@@ -211,7 +295,7 @@ PUSHINT 0
 ROT
 PUSHINT 64
 DICTUSETB
-GETGLOB 12
+OVER
 NEWC
 STU 256
 PUSHINT 1
@@ -223,38 +307,38 @@ PUSHINT 2
 ROT
 PUSHINT 64
 DICTUSET
-ROLL 6
+PUSH S7
 PUSHINT 3
 ROT
 PUSHINT 64
 DICTUSET
-ROLL 5
+PUSH S6
 PUSHINT 4
 ROT
 PUSHINT 64
 DICTUSET
-ROLL 4
+PUSH S5
 NEWC
 STU 32
 PUSHINT 5
 ROT
 PUSHINT 64
 DICTUSETB
-ROLL 3
+PUSH S4
 NEWC
 STU 32
 PUSHINT 6
 ROT
 PUSHINT 64
 DICTUSETB
-ROT
+PUSH S3
 NEWC
 STU 32
 PUSHINT 7
 ROT
 PUSHINT 64
 DICTUSETB
-SWAP
+PUSH S2
 NEWC
 STI 1
 PUSHINT 8
@@ -271,11 +355,11 @@ STOPTREF
 STOPTREF
 STZERO
 ENDC
-.loc ../contracts/VestingFactory.sol, 56
+.loc ../contracts/VestingFactory.sol, 75
 GETGLOB 12
 INC
 SETGLOB 12
-.loc ../contracts/VestingFactory.sol, 57
+.loc ../contracts/VestingFactory.sol, 77
 DUP
 HASHCU
 NEWC
@@ -295,7 +379,39 @@ STSLICECONST x345aaf9fc_
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/VestingFactory.sol, 62
+.loc ../contracts/VestingFactory.sol, 83
+ROT
+ROLL 3
+ROLL 4
+ROLL 5
+ROLL 6
+BLKSWAP 2, 6
+PUSH S7
+PUSHSLICE xc0000000000000000000000001
+NEWC
+STSLICE
+ROLLREV 8
+NEWC
+STSLICECONST x6634bed9
+STSLICE
+STU 256
+ROLLREV 6
+NEWC
+STSLICE
+ROLLREV 5
+NEWC
+STSLICE
+STU 32
+STU 32
+STU 32
+STI 1
+STBREFR
+STBREFR
+STBREFR
+ENDC
+PUSHINT 0
+SENDRAWMSG
+.loc ../contracts/VestingFactory.sol, 94
 GETGLOB 4
 PUSHINT 0
 SETINDEXQ 2
@@ -486,6 +602,12 @@ TRUE
 SETGLOB 7
 
 .macro public_function_selector
+DUP
+PUSHINT 153588447
+EQUAL
+IFJMPREF {
+	CALL $getVestingCode$
+}
 DUP
 PUSHINT 478865691
 EQUAL

@@ -9,12 +9,17 @@ import "Gas.sol";
 import "./interfaces/tokens/IRootTokenContract.sol";
 import "./interfaces/tokens/ITONTokenWallet.sol";
 import "./interfaces/tokens/ITokensReceivedCallback.sol";
-import "./interfaces/tokens/IExpectedWalletAddressCallback.sol";
 import "../node_modules/@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "../node_modules/@broxus/contracts/contracts/utils/RandomNonce.sol";
 
 
-contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, RandomNonce {
+contract Vesting is ITokensReceivedCallback, RandomNonce {
+
+    event TokensSent(address to, uint128 amount);
+    event TokensReceived(address from, uint128 amount);
+    event RevokeCalled();
+    event ReleaseCalled(uint32 timespamp, uint128 amount);
+    
     enum Status {
         Initializing,
         WaitingForTokens,
@@ -51,6 +56,11 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
     }
 
     constructor() public {
+        require(beneficiary.value != 0, Errors.EMPTY_BENEFICIARY);
+        require(step <= duration, Errors.STEP_LONGER_THEN_DURATION);
+        require(tokenRoot.value != 0, Errors.TOKEN_ROOT_IS_EMTPY);
+        require(duration > 0, Errors.ZERO_DURATION);
+        require(startTime > now, Errors.START_TIME_IN_PAST);
         if (tvm.pubkey() != 0) {
             require(msg.pubkey() == tvm.pubkey(), Errors.WRONG_PUBKEY);
             require(address(this).balance >= Gas.DEPLOY_VALUE, Errors.DEPLOY_VALUE_TOO_LOW);
@@ -59,11 +69,6 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
             require(msg.value >= Gas.DEPLOY_VALUE, Errors.DEPLOY_VALUE_TOO_LOW);
         }
 
-        require(beneficiary.value != 0, Errors.EMPTY_BENEFICIARY);
-        require(step <= duration, Errors.STEP_LONGER_THEN_DURATION);
-        require(tokenRoot.value != 0, Errors.TOKEN_ROOT_IS_EMTPY);
-        require(duration > 0, Errors.ZERO_DURATION);
-        require(startTime > now, Errors.START_TIME_IN_PAST);
         lastWithdraw = startTime;
         _deployWallets();
     }
@@ -82,6 +87,9 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
             balance -= amountToRelease;
         }
         lastWithdraw = now;
+
+        emit ReleaseCalled(lastWithdraw, amountToRelease);
+
         sendTokens(beneficiary, amountToRelease, beneficiary);
     }
 
@@ -91,6 +99,9 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
         _reserve();
 
         revoked = true;
+
+        emit RevokeCalled();
+
         ITONTokenWallet(tokenWallet).balance{value: 0, flag: MsgFlag.ALL_NOT_RESERVED, callback: onGetBalanceRevoke}();
     }
 
@@ -121,52 +132,45 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
     }
 
     function onGetBalanceRevoke(uint128 walletBalance) public view {
-        require(msg.sender == tokenWallet, Errors.NOT_TOKEN_WALLET);
+        require(msg.sender.value != 0 && msg.sender == tokenWallet, Errors.NOT_TOKEN_WALLET);
         _reserve();
         sendTokens(owner, walletBalance, owner);
     }
 
     function tokensReceivedCallback(
-        address token_wallet,
+        address tokenWallet_,
         address /*token_root*/,
-        uint128 tokens_amount,
+        uint128 tokensAmount,
         uint256 /*sender_public_key*/,
-        address /*sender_address*/,
-        address sender_wallet,
-        address original_gas_to,
+        address senderAddress,
+        address senderWallet,
+        address originalGasTo,
         uint128 /*updated_balance*/,
         TvmCell /*payload*/
     ) override public {
-        require(msg.sender == token_wallet, Errors.WRONG_SENDER);
+        require(msg.sender.value != 0 && msg.sender == tokenWallet_, Errors.WRONG_SENDER);
         _reserve();
 
-        if (msg.sender == tokenWallet && _status() == Status.WaitingForTokens) {
-            initialBalance = tokens_amount;
+        if (
+            tokenWallet_ == tokenWallet &&
+            senderAddress == owner &&
+            _status() == Status.WaitingForTokens
+        ) {
+            initialBalance = tokensAmount;
             balance = initialBalance;
-            original_gas_to.transfer({value: 0, flag: MsgFlag.ALL_NOT_RESERVED});
+            emit TokensReceived(senderAddress, tokensAmount);
+            originalGasTo.transfer({value: 0, flag: MsgFlag.ALL_NOT_RESERVED});
         } else {
             TvmCell empty;
             ITONTokenWallet(msg.sender).transfer{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                sender_wallet,
-                tokens_amount,
+                senderWallet,
+                tokensAmount,
                 0,
-                original_gas_to,
+                originalGasTo,
                 false,
                 empty
             );
         }
-    }
-
-    function expectedWalletAddressCallback(
-        address wallet,
-        uint256 /*wallet_public_key*/,
-        address owner_address
-    ) override public {
-        require(msg.sender == tokenRoot, Errors.NOT_TOKEN_ROOT);
-        require(owner_address == address(this), Errors.NOT_TOKEN_WALLET);
-        _reserve();
-        tokenWallet = wallet;
-        ITONTokenWallet(wallet).setReceiveCallback{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(address(this), false);
     }
 
     function _status() private view returns(Status) {
@@ -189,7 +193,10 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
     }
 
     function sendTokens(address to, uint128 amount, address sendGasTo) private view {
-        TvmCell payload;
+
+        emit TokensSent(to, amount);
+
+        TvmCell empty;
         ITONTokenWallet(tokenWallet).transferToRecipient{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
             0,                // recipient_public_key
             to,               // recipient_address
@@ -197,8 +204,8 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
             0,                // deploy_grams
             0,                // transfer_grams
             sendGasTo,
-            false,            // notify_receiver
-            payload
+            true,            // notify_receiver
+            empty
         );
     }
 
@@ -214,6 +221,7 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
     }
 
     function _deployWallets() private view inline {
+
         IRootTokenContract(tokenRoot)
             .deployEmptyWallet {
                 value: Gas.DEPLOY_EMPTY_WALLET_VALUE,
@@ -224,6 +232,7 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
                 address(this),                  // owner_address
                 owner                           // gas_back_address
             );
+
         IRootTokenContract(tokenRoot)
             .deployEmptyWallet {
                 value: Gas.DEPLOY_EMPTY_WALLET_VALUE,
@@ -234,19 +243,33 @@ contract Vesting is ITokensReceivedCallback, IExpectedWalletAddressCallback, Ran
                 beneficiary,                    // owner_address
                 owner                           // gas_back_address
             );
+
         IRootTokenContract(tokenRoot)
-            .sendExpectedWalletAddress{
-                value: Gas.SEND_EXPECTED_WALLET_VALUE,
-                flag: MsgFlag.SENDER_PAYS_FEES
+            .getWalletAddress{
+                value: Gas.GET_WALLET_ADDRESS_VALUE,
+                flag: MsgFlag.SENDER_PAYS_FEES,
+                callback: Vesting.onTokenWallet
             }(
-                0,                              // wallet_public_key_
-                address(this),                  // owner_address_
-                address(this)                   // to
+                0,                              // wallet_public_key
+                address(this)                   // owner_address
             );
+
+    }
+
+    function onTokenWallet(address wallet) external {
+        require(msg.sender.value != 0 && msg.sender == tokenRoot, Errors.NOT_TOKEN_ROOT);
+        _reserve();
+
+        tokenWallet = wallet;
+
+        ITONTokenWallet(wallet).setReceiveCallback{
+            value: 0,
+            flag: MsgFlag.ALL_NOT_RESERVED
+        }(address(this), false);
     }
 
     function _reserve() private view inline {
-        tvm.rawReserve(Gas.INITIAL_BALANCE, 2);
+        tvm.rawReserve(Gas.INITIAL_BALANCE, 0);
     }
 
 }

@@ -10,10 +10,36 @@ IFREF {
 GETGLOB 6
 THROWIF 51
 ENDS
-.loc ../contracts/Vesting.sol, 54
+.loc ../contracts/Vesting.sol, 59
+GETGLOB 13
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+THROWIFNOT 105
+.loc ../contracts/Vesting.sol, 60
+GETGLOB 16
+GETGLOB 15
+LEQ
+THROWIFNOT 106
+.loc ../contracts/Vesting.sol, 61
+GETGLOB 12
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+THROWIFNOT 107
+.loc ../contracts/Vesting.sol, 62
+GETGLOB 15
+GTINT 0
+THROWIFNOT 108
+.loc ../contracts/Vesting.sol, 63
+GETGLOB 14
+NOW
+GREATER
+THROWIFNOT 109
+.loc ../contracts/Vesting.sol, 64
 GETGLOB 2
 PUSHCONT {
-	.loc ../contracts/Vesting.sol, 55
+	.loc ../contracts/Vesting.sol, 65
 	GETGLOB 5
 	DUP
 	ISNULL
@@ -25,18 +51,18 @@ PUSHCONT {
 	GETGLOB 2
 	EQUAL
 	THROWIFNOT 103
-	.loc ../contracts/Vesting.sol, 56
+	.loc ../contracts/Vesting.sol, 66
 	GETPARAM 7
 	INDEX 0
 	PUSHINT 2000000000
 	GEQ
 	THROWIFNOT 104
-	.loc ../contracts/Vesting.sol, 57
+	.loc ../contracts/Vesting.sol, 67
 	ACCEPT
 	.loc ../contracts/Vesting.sol, 0
 }
 PUSHCONT {
-	.loc ../contracts/Vesting.sol, 59
+	.loc ../contracts/Vesting.sol, 69
 	DEPTH
 	ADDCONST -2
 	PICK
@@ -46,36 +72,10 @@ PUSHCONT {
 	.loc ../contracts/Vesting.sol, 0
 }
 IFELSE
-.loc ../contracts/Vesting.sol, 62
-GETGLOB 13
-PARSEMSGADDR
-INDEX 3
-PLDU 256
-THROWIFNOT 105
-.loc ../contracts/Vesting.sol, 63
-GETGLOB 16
-GETGLOB 15
-LEQ
-THROWIFNOT 106
-.loc ../contracts/Vesting.sol, 64
-GETGLOB 12
-PARSEMSGADDR
-INDEX 3
-PLDU 256
-THROWIFNOT 107
-.loc ../contracts/Vesting.sol, 65
-GETGLOB 15
-GTINT 0
-THROWIFNOT 108
-.loc ../contracts/Vesting.sol, 66
-GETGLOB 14
-NOW
-GREATER
-THROWIFNOT 109
-.loc ../contracts/Vesting.sol, 67
+.loc ../contracts/Vesting.sol, 72
 GETGLOB 14
 SETGLOB 20
-.loc ../contracts/Vesting.sol, 217
+.loc ../contracts/Vesting.sol, 225
 GETGLOB 11
 MYADDR
 PUSHINT 0
@@ -100,7 +100,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/Vesting.sol, 227
+.loc ../contracts/Vesting.sol, 236
 GETGLOB 11
 GETGLOB 13
 PUSHINT 0
@@ -125,8 +125,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/Vesting.sol, 237
-MYADDR
+.loc ../contracts/Vesting.sol, 247
 MYADDR
 PUSHINT 0
 GETGLOB 12
@@ -135,15 +134,12 @@ STSLICECONST x62_
 STSLICE
 PUSHSLICE x405f5e100000000000000000000000000003_
 STSLICER
-ROLLREV 3
+ROTREV
 NEWC
-STSLICECONST x55b3a9fb
+STSLICECONST x069a08f8
+STSLICECONST x49b2f6d7
 STU 256
 STSLICE
-SWAP
-NEWC
-STSLICE
-STBREFR
 STBREFR
 ENDC
 PUSHINT 1
@@ -164,7 +160,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/Vesting.sol, 71
+.loc ../contracts/Vesting.sol, 76
 ENDS
 .loc ../contracts/Vesting.sol, 0
 CALLREF {
@@ -181,51 +177,51 @@ SETGLOB 7
 CALL $release_internal_macro$
 
 .macro release_internal_macro
-.loc ../contracts/Vesting.sol, 44
+.loc ../contracts/Vesting.sol, 49
 GETGLOB 9
 GETGLOB 13
 SDEQ
 THROWIFNOT 102
-.loc ../contracts/Vesting.sol, 72
+.loc ../contracts/Vesting.sol, 77
 DEPTH
 ADDCONST -2
 PICK
 PUSHINT 1000000000
 GEQ
 THROWIFNOT 117
-.loc ../contracts/Vesting.sol, 73
+.loc ../contracts/Vesting.sol, 78
 CALLREF {
 	CALL $_status_internal_macro$
 }
 EQINT 3
 THROWIFNOT 110
-.loc ../contracts/Vesting.sol, 74
+.loc ../contracts/Vesting.sol, 79
 CALLREF {
 	CALL $_releasableAmount_internal_macro$
 }
-.loc ../contracts/Vesting.sol, 75
+.loc ../contracts/Vesting.sol, 80
 DUP
 GTINT 0
 THROWIFNOT 111
-.loc ../contracts/Vesting.sol, 249
+.loc ../contracts/Vesting.sol, 272
 PUSHINT 500000000
-PUSHINT 2
+PUSHINT 0
 RAWRESERVE
-.loc ../contracts/Vesting.sol, 78
+.loc ../contracts/Vesting.sol, 83
 DUP
 GETGLOB 22
 GREATER
 PUSHCONT {
-	.loc ../contracts/Vesting.sol, 79
+	.loc ../contracts/Vesting.sol, 84
 	DROP
 	GETGLOB 22
-	.loc ../contracts/Vesting.sol, 80
+	.loc ../contracts/Vesting.sol, 85
 	PUSHINT 0
 	SETGLOB 22
 	.loc ../contracts/Vesting.sol, 0
 }
 PUSHCONT {
-	.loc ../contracts/Vesting.sol, 82
+	.loc ../contracts/Vesting.sol, 87
 	GETGLOB 22
 	OVER
 	SUB
@@ -234,10 +230,21 @@ PUSHCONT {
 	.loc ../contracts/Vesting.sol, 0
 }
 IFELSE
-.loc ../contracts/Vesting.sol, 84
+.loc ../contracts/Vesting.sol, 89
 NOW
 SETGLOB 20
-.loc ../contracts/Vesting.sol, 85
+.loc ../contracts/Vesting.sol, 91
+DUP
+GETGLOB 20
+PUSHSLICE xc0000000000000000000000000208ecf9a
+NEWC
+STSLICE
+STU 32
+STU 128
+ENDC
+PUSHINT 0
+SENDRAWMSG
+.loc ../contracts/Vesting.sol, 93
 GETGLOB 13
 SWAP
 GETGLOB 13
@@ -255,7 +262,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/Vesting.sol, 88
+.loc ../contracts/Vesting.sol, 96
 ENDS
 .loc ../contracts/Vesting.sol, 0
 CALLREF {
@@ -272,29 +279,35 @@ SETGLOB 7
 CALL $revoke_internal_macro$
 
 .macro revoke_internal_macro
-.loc ../contracts/Vesting.sol, 49
+.loc ../contracts/Vesting.sol, 54
 GETGLOB 9
 GETGLOB 11
 SDEQ
 THROWIFNOT 101
-.loc ../contracts/Vesting.sol, 89
+.loc ../contracts/Vesting.sol, 97
 DEPTH
 ADDCONST -2
 PICK
 PUSHINT 1000000000
 GEQ
 THROWIFNOT 112
-.loc ../contracts/Vesting.sol, 90
+.loc ../contracts/Vesting.sol, 98
 GETGLOB 17
 THROWIFNOT 113
-.loc ../contracts/Vesting.sol, 249
+.loc ../contracts/Vesting.sol, 272
 PUSHINT 500000000
-PUSHINT 2
+PUSHINT 0
 RAWRESERVE
-.loc ../contracts/Vesting.sol, 93
+.loc ../contracts/Vesting.sol, 101
 TRUE
 SETGLOB 18
-.loc ../contracts/Vesting.sol, 94
+.loc ../contracts/Vesting.sol, 103
+PUSHREF {
+	.blob xc000000000000000000000000078749d6e
+}
+PUSHINT 0
+SENDRAWMSG
+.loc ../contracts/Vesting.sol, 105
 GETGLOB 19
 NEWC
 STSLICECONST x62_
@@ -315,7 +328,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/Vesting.sol, 97
+.loc ../contracts/Vesting.sol, 108
 LDU 32
 GETGLOB 4
 ROT
@@ -386,7 +399,7 @@ SETGLOB 7
 CALL $releasableAmount_internal_macro$
 
 .macro releasableAmount_internal_macro
-.loc ../contracts/Vesting.sol, 98
+.loc ../contracts/Vesting.sol, 109
 GETGLOB 4
 PUSHINT 0
 SETINDEXQ 2
@@ -409,7 +422,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/Vesting.sol, 101
+.loc ../contracts/Vesting.sol, 112
 LDU 32
 GETGLOB 4
 ROT
@@ -521,7 +534,7 @@ SETGLOB 7
 CALL $getDetails_internal_macro$
 
 .macro getDetails_internal_macro
-.loc ../contracts/Vesting.sol, 115
+.loc ../contracts/Vesting.sol, 126
 GETGLOB 4
 PUSHINT 0
 SETINDEXQ 2
@@ -555,7 +568,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/Vesting.sol, 119
+.loc ../contracts/Vesting.sol, 130
 LDU 32
 GETGLOB 4
 ROT
@@ -626,7 +639,7 @@ SETGLOB 7
 CALL $status_internal_macro$
 
 .macro status_internal_macro
-.loc ../contracts/Vesting.sol, 120
+.loc ../contracts/Vesting.sol, 131
 GETGLOB 4
 PUSHINT 0
 SETINDEXQ 2
@@ -649,7 +662,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/Vesting.sol, 123
+.loc ../contracts/Vesting.sol, 134
 LDUQ 128
 PUSHCONT {
 	LDREF
@@ -674,16 +687,26 @@ SETGLOB 7
 CALL $onGetBalanceRevoke_internal_macro$
 
 .macro onGetBalanceRevoke_internal_macro
-.loc ../contracts/Vesting.sol, 124
+.loc ../contracts/Vesting.sol, 135
 GETGLOB 9
-GETGLOB 19
-SDEQ
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+NEQINT 0
+DUP
+PUSHCONT {
+	DROP
+	GETGLOB 9
+	GETGLOB 19
+	SDEQ
+}
+IF
 THROWIFNOT 114
-.loc ../contracts/Vesting.sol, 249
+.loc ../contracts/Vesting.sol, 272
 PUSHINT 500000000
-PUSHINT 2
+PUSHINT 0
 RAWRESERVE
-.loc ../contracts/Vesting.sol, 126
+.loc ../contracts/Vesting.sol, 137
 GETGLOB 11
 SWAP
 GETGLOB 11
@@ -701,7 +724,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/Vesting.sol, 129
+.loc ../contracts/Vesting.sol, 140
 LDMSGADDRQ
 PUSHCONT {
 	LDREF
@@ -783,35 +806,63 @@ SETGLOB 7
 CALL $tokensReceivedCallback_internal_macro$
 
 .macro tokensReceivedCallback_internal_macro
-.loc ../contracts/Vesting.sol, 140
+.loc ../contracts/Vesting.sol, 151
 GETGLOB 9
-ROLL 9
-SDEQ
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+NEQINT 0
+DUP
+PUSHCONT {
+	DROP
+	GETGLOB 9
+	PUSH S9
+	SDEQ
+}
+IF
 THROWIFNOT 115
-.loc ../contracts/Vesting.sol, 249
+.loc ../contracts/Vesting.sol, 272
 PUSHINT 500000000
-PUSHINT 2
+PUSHINT 0
 RAWRESERVE
-.loc ../contracts/Vesting.sol, 143
-GETGLOB 9
+.loc ../contracts/Vesting.sol, 154
+ROLL 8
 GETGLOB 19
 SDEQ
 DUP
 PUSHCONT {
 	DROP
-	CALLREF {
-		CALL $_status_internal_macro$
+	PUSH S4
+	GETGLOB 11
+	SDEQ
+	DUP
+	PUSHCONT {
+		DROP
+		CALLREF {
+			CALL $_status_internal_macro$
+		}
+		EQINT 1
 	}
-	EQINT 1
+	IF
 }
 IF
 PUSHCONT {
-	.loc ../contracts/Vesting.sol, 144
+	.loc ../contracts/Vesting.sol, 159
 	PUSH2 S6, S6
 	SETGLOB 21
-	.loc ../contracts/Vesting.sol, 145
+	.loc ../contracts/Vesting.sol, 160
 	SETGLOB 22
-	.loc ../contracts/Vesting.sol, 146
+	.loc ../contracts/Vesting.sol, 161
+	PUSH2 S6, S4
+	PUSHSLICE xc000000000000000000000000039769bd3
+	NEWC
+	STSLICE
+	STSLICE
+	STU 128
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+	.loc ../contracts/Vesting.sol, 162
 	PUSH S2
 	NEWC
 	STSLICECONST x62_
@@ -824,10 +875,10 @@ PUSHCONT {
 	.loc ../contracts/Vesting.sol, 0
 }
 PUSHCONT {
-	.loc ../contracts/Vesting.sol, 148
+	.loc ../contracts/Vesting.sol, 164
 	PUSHREF {
 	}
-	.loc ../contracts/Vesting.sol, 149
+	.loc ../contracts/Vesting.sol, 165
 	FALSE
 	PUSH S4
 	PUSHINT 0
@@ -860,155 +911,68 @@ IFELSE
 .loc ../contracts/Vesting.sol, 0
 BLKDROP 8
 
-.macro expectedWalletAddressCallback
-DROP
-GETGLOB 6
-THROWIFNOT 76
-GETGLOB 2
-ISNULL
-IFREF {
-	CALL $c4_to_c7$
-}
-.loc ../contracts/Vesting.sol, 160
-LDMSGADDRQ
-PUSHCONT {
-	LDREF
-	ENDS
-	CTOS
-	LDMSGADDR
-}
-IFNOT
-LDUQ 256
-PUSHCONT {
-	LDREF
-	ENDS
-	CTOS
-	LDU 256
-}
-IFNOT
-LDMSGADDRQ
-PUSHCONT {
-	LDREF
-	ENDS
-	CTOS
-	LDMSGADDR
-}
-IFNOT
-ENDS
-.loc ../contracts/Vesting.sol, 0
-CALLREF {
-	CALL $expectedWalletAddressCallback_internal_macro$
-}
-CALLREF {
-	CALL $c7_to_c4$
-}
-TRUE
-SETGLOB 7
-
-.globl	expectedWalletAddressCallback_internal
-.type	expectedWalletAddressCallback_internal, @function
-CALL $expectedWalletAddressCallback_internal_macro$
-
-.macro expectedWalletAddressCallback_internal_macro
-.loc ../contracts/Vesting.sol, 165
-GETGLOB 9
-GETGLOB 12
-SDEQ
-THROWIFNOT 116
-.loc ../contracts/Vesting.sol, 166
-MYADDR
-SDEQ
-THROWIFNOT 114
-.loc ../contracts/Vesting.sol, 249
-PUSHINT 500000000
-PUSHINT 2
-RAWRESERVE
-.loc ../contracts/Vesting.sol, 168
-OVER
-SETGLOB 19
-.loc ../contracts/Vesting.sol, 169
-FALSE
-MYADDR
-ROLL 3
-NEWC
-STSLICECONST x62_
-STSLICE
-PUSHINT 1
-STUR 111
-ROTREV
-NEWC
-STSLICECONST x71eee875
-STSLICE
-STI 1
-STBREFR
-ENDC
-PUSHINT 128
-SENDRAWMSG
-.loc ../contracts/Vesting.sol, 0
-DROP
-
 .globl	_status_internal
 .type	_status_internal, @function
 CALL $_status_internal_macro$
 
 .macro _status_internal_macro
-.loc ../contracts/Vesting.sol, 172
+.loc ../contracts/Vesting.sol, 176
 PUSHINT 0
 PUSHCONT {
-	.loc ../contracts/Vesting.sol, 173
+	.loc ../contracts/Vesting.sol, 177
 	GETGLOB 19
 	PARSEMSGADDR
 	INDEX 3
 	PLDU 256
 	PUSHCONT {
-		.loc ../contracts/Vesting.sol, 174
+		.loc ../contracts/Vesting.sol, 178
 		DROP
 		PUSHINT 0
 		.loc ../contracts/Vesting.sol, 0
 	}
 	IFNOTJMP
-	.loc ../contracts/Vesting.sol, 176
+	.loc ../contracts/Vesting.sol, 180
 	GETGLOB 21
 	PUSHCONT {
-		.loc ../contracts/Vesting.sol, 177
+		.loc ../contracts/Vesting.sol, 181
 		DROP
 		PUSHINT 1
 		.loc ../contracts/Vesting.sol, 0
 	}
 	IFNOTJMP
-	.loc ../contracts/Vesting.sol, 179
+	.loc ../contracts/Vesting.sol, 183
 	GETGLOB 18
 	PUSHCONT {
-		.loc ../contracts/Vesting.sol, 180
+		.loc ../contracts/Vesting.sol, 184
 		DROP
 		PUSHINT 5
 		.loc ../contracts/Vesting.sol, 0
 	}
 	IFJMP
-	.loc ../contracts/Vesting.sol, 182
+	.loc ../contracts/Vesting.sol, 186
 	GETGLOB 22
 	PUSHCONT {
-		.loc ../contracts/Vesting.sol, 183
+		.loc ../contracts/Vesting.sol, 187
 		DROP
 		PUSHINT 4
 		.loc ../contracts/Vesting.sol, 0
 	}
 	IFNOTJMP
-	.loc ../contracts/Vesting.sol, 185
+	.loc ../contracts/Vesting.sol, 189
 	NOW
 	GETGLOB 14
 	LESS
 	PUSHCONT {
-		.loc ../contracts/Vesting.sol, 186
+		.loc ../contracts/Vesting.sol, 190
 		DROP
 		PUSHINT 2
 		.loc ../contracts/Vesting.sol, 0
 	}
 	IFJMP
-	.loc ../contracts/Vesting.sol, 188
+	.loc ../contracts/Vesting.sol, 192
 	DROP
 	PUSHINT 3
-	.loc ../contracts/Vesting.sol, 172
+	.loc ../contracts/Vesting.sol, 176
 }
 CALLX
 .loc ../contracts/Vesting.sol, 0
@@ -1018,11 +982,21 @@ CALLX
 CALL $sendTokens_internal_macro$
 
 .macro sendTokens_internal_macro
-.loc ../contracts/Vesting.sol, 192
+.loc ../contracts/Vesting.sol, 197
+PUSH2 S1, S2
+PUSHSLICE xc0000000000000000000000000660d8982
+NEWC
+STSLICE
+STSLICE
+STU 128
+ENDC
+PUSHINT 0
+SENDRAWMSG
+.loc ../contracts/Vesting.sol, 199
 PUSHREF {
 }
-.loc ../contracts/Vesting.sol, 193
-FALSE
+.loc ../contracts/Vesting.sol, 200
+TRUE
 ROT
 PUSHINT 0
 DUP
@@ -1060,10 +1034,10 @@ SENDRAWMSG
 CALL $_releasableAmount_internal_macro$
 
 .macro _releasableAmount_internal_macro
-.loc ../contracts/Vesting.sol, 205
+.loc ../contracts/Vesting.sol, 212
 PUSHINT 0
 PUSHCONT {
-	.loc ../contracts/Vesting.sol, 206
+	.loc ../contracts/Vesting.sol, 213
 	NOW
 	GETGLOB 20
 	GETGLOB 16
@@ -1071,13 +1045,13 @@ PUSHCONT {
 	UFITS 32
 	LESS
 	PUSHCONT {
-		.loc ../contracts/Vesting.sol, 207
+		.loc ../contracts/Vesting.sol, 214
 		DROP
 		PUSHINT 0
 		.loc ../contracts/Vesting.sol, 0
 	}
 	IFJMP
-	.loc ../contracts/Vesting.sol, 209
+	.loc ../contracts/Vesting.sol, 216
 	NOW
 	GETGLOB 14
 	GETGLOB 15
@@ -1085,13 +1059,13 @@ PUSHCONT {
 	UFITS 32
 	GEQ
 	PUSHCONT {
-		.loc ../contracts/Vesting.sol, 210
+		.loc ../contracts/Vesting.sol, 217
 		DROP
 		GETGLOB 21
 		.loc ../contracts/Vesting.sol, 0
 	}
 	PUSHCONT {
-		.loc ../contracts/Vesting.sol, 212
+		.loc ../contracts/Vesting.sol, 219
 		GETGLOB 21
 		GETGLOB 15
 		GETGLOB 16
@@ -1110,10 +1084,76 @@ PUSHCONT {
 	}
 	CONDSEL
 	JMPX
-	.loc ../contracts/Vesting.sol, 205
+	.loc ../contracts/Vesting.sol, 212
 }
 CALLX
 .loc ../contracts/Vesting.sol, 0
+
+.macro onTokenWallet
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc ../contracts/Vesting.sol, 259
+LDMSGADDRQ
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+	LDMSGADDR
+}
+IFNOT
+ENDS
+.loc ../contracts/Vesting.sol, 260
+GETGLOB 9
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+NEQINT 0
+DUP
+PUSHCONT {
+	DROP
+	GETGLOB 9
+	GETGLOB 12
+	SDEQ
+}
+IF
+THROWIFNOT 116
+.loc ../contracts/Vesting.sol, 272
+PUSHINT 500000000
+PUSHINT 0
+RAWRESERVE
+.loc ../contracts/Vesting.sol, 263
+DUP
+SETGLOB 19
+.loc ../contracts/Vesting.sol, 265
+FALSE
+MYADDR
+ROT
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 1
+STUR 111
+ROTREV
+NEWC
+STSLICECONST x71eee875
+STSLICE
+STI 1
+STBREFR
+ENDC
+PUSHINT 128
+SENDRAWMSG
+.loc ../contracts/Vesting.sol, 0
+CALLREF {
+	CALL $c7_to_c4$
+}
+TRUE
+SETGLOB 7
 
 .macro c7_to_c4
 GETGLOB 22
@@ -1719,7 +1759,7 @@ PUSHINT 1756716863
 LEQ
 IFJMPREF {
 	DUP
-	PUSHINT 751537512
+	PUSHINT 819460355
 	LEQ
 	IFJMPREF {
 		DUP
@@ -1735,28 +1775,22 @@ IFJMPREF {
 			CALL $onGetBalanceRevoke$
 		}
 		DUP
-		PUSHINT 292780380
-		EQUAL
-		IFJMPREF {
-			CALL $expectedWalletAddressCallback$
-		}
-		DUP
 		PUSHINT 751537512
 		EQUAL
 		IFJMPREF {
 			CALL $initialBalance$
 		}
-	}
-	DUP
-	PUSHINT 1286874325
-	LEQ
-	IFJMPREF {
 		DUP
 		PUSHINT 819460355
 		EQUAL
 		IFJMPREF {
 			CALL $duration$
 		}
+	}
+	DUP
+	PUSHINT 1286874325
+	LEQ
+	IFJMPREF {
 		DUP
 		PUSHINT 995308319
 		EQUAL
@@ -1768,6 +1802,12 @@ IFJMPREF {
 		EQUAL
 		IFJMPREF {
 			CALL $release$
+		}
+		DUP
+		PUSHINT 1236465367
+		EQUAL
+		IFJMPREF {
+			CALL $onTokenWallet$
 		}
 		DUP
 		PUSHINT 1286874325
